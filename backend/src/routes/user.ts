@@ -11,11 +11,13 @@ userRouter.post("/register", (req, res) => {
   const hashedPassword = sjcl.codec.hex.fromBits(passwordSHA);
   const displayName = req.body["displayName"];
 
+  console.log(`${req.method} ${req.originalUrl} ${userName} ${hashedPassword} ${displayName}`);
+
   connection.query(
     `INSERT INTO Users VALUE(NULL, "${userName}", "${hashedPassword}", "${displayName}", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)`,
     (error) => {
       if (error) res.status(400).send(error);
-      else res.sendStatus(200);
+      else res.status(200).send();
     }
   );
 });
@@ -26,12 +28,16 @@ userRouter.post("/login", (req, res) => {
   const passwordSHA = sjcl.hash.sha256.hash(password);
   const hashedPassword = sjcl.codec.hex.fromBits(passwordSHA);
 
+  console.log(`${req.method} ${req.originalUrl} ${userName} ${hashedPassword}`);
+
   connection.query(
     `SELECT id FROM Users WHERE userName = "${userName}" AND hashedPassword = "${hashedPassword}"`,
     (error, rows) => {
       if (error) res.sendStatus(500);
-      if (rows.length === 1) res.sendStatus(200);
-      else res.sendStatus(404);
+      if (rows.length === 1) {
+        console.log(rows[0]["id"]);
+        res.status(200).send({ data: `${rows[0]["id"]}` });
+      } else res.status(404).send();
     }
   );
 });
