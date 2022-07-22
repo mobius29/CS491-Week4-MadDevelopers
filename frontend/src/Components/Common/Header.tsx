@@ -1,5 +1,7 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
+import { useDispatch } from 'react-redux'
+import { logout } from '../../Modules/Auth'
 
 const HeaderBlock = styled.div`
   display: flex;
@@ -43,7 +45,19 @@ const HeaderBlock = styled.div`
   }
 `
 
-const Header = () => {
+interface IProps {
+  id: number
+}
+
+const Header = ({ id }: IProps) => {
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const onClick = () => {
+    dispatch(logout())
+    navigate('/')
+  }
+
   return (
     <HeaderBlock>
       <Link to='/' className='logo'>
@@ -62,12 +76,22 @@ const Header = () => {
         <button className='search-btn'>검색</button>
       </form>
       <nav className='top-nav'>
-        <Link to='/login' className='loginBtn'>
-          login
-        </Link>
-        <Link to='/register' className='register'>
-          register
-        </Link>
+        {id === -1 ? (
+          <>
+            <Link to='/login' className='loginBtn'>
+              login
+            </Link>
+            <Link to='/register' className='register'>
+              register
+            </Link>
+          </>
+        ) : (
+          <>
+            <Link to={"/wiki"}>위키</Link>
+            <Link to={`/user/${id}`}>내 정보</Link>
+            <div onClick={() => onClick()}>로그아웃</div>
+          </>
+        )}
       </nav>
     </HeaderBlock>
   )

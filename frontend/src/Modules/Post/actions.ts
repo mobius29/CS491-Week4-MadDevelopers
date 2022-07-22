@@ -30,6 +30,7 @@ export const getPostsSuccess = createAction(GET_POSTS_SUCCESS)<{
       id: number
       tag: string
     }[]
+    createdAt: Date
   }[]
 }>()
 export const getPostsFailure = createAction(GET_POSTS_FAILURE)<any>()

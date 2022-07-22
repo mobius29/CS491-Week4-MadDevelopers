@@ -93,7 +93,9 @@ const WriteForm = () => {
         return
       }
     } else {
-      navigate(`/post/${postId}`)
+      if (postId !== -1) {
+        navigate(`/post/${postId}`)
+      }
     }
   }, [postId, postError, navigate])
 

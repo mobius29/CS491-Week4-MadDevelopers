@@ -21,7 +21,6 @@ const createRequestSaga = (type: string, request: any) => {
   return function* (action: IAction) {
     try {
       const response: IResponse = yield call(request, action.payload)
-      console.log(response)
       yield put({
         type: SUCCESS,
         payload: response.data,

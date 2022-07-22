@@ -21,6 +21,7 @@ export type State = {
           id: number
           tag: string
         }[]
+        createdAt: Date
       }[]
     | null
   getPostsError: any
