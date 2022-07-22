@@ -1,6 +1,8 @@
 import { CookieOptions, Router } from "express";
+import fileUpload from "express-fileupload";
 import sjcl from "sjcl";
 import { connection } from "../connection.js";
+import { v4 as uuidv4 } from "uuid";
 
 const userRouter: Router = Router();
 
@@ -88,7 +90,7 @@ userRouter.get("/:id", (req, res) => {
   const id: number = parseInt(req.params.id);
   let starred: boolean = false;
 
-  console.log(req.method, req.originalUrl);
+  console.log(req.method, req.originalUrl, `id = ${id}`);
 
   if (id.toString() === "NaN")
     res.sendStatus(400);
@@ -128,14 +130,47 @@ userRouter.put("/update/:id", (req, res) => {
 
   console.log(req.method, req.originalUrl);
 
-  if (selfInformation.length === 0) {
-    connection.query(`UPDATE Users SET displayName = "${displayName}", selfInformation = NULL WHERE id = ${id}`);
+  connection.query(
+    `UPDATE Users SET displayName = "${displayName}", selfInformation = "${selfInformation}" WHERE id = ${id}`,
+    (error) => {
+      if (error?.errno === 1062) {
+        res.sendStatus(400);
+      }
+      else {
+        res.sendStatus(200);
+      }
+    }
+  );
+});
+
+userRouter.put("/upload/:id", (req, res) => {
+  if (req.files) {
+    const id = parseInt(req.params.id);
+
+    const file = req.files.file as fileUpload.UploadedFile;
+    const ext = file.name.slice(file.name.lastIndexOf("."));
+    const uuid = uuidv4();
+    const fileName = `./images/${uuid}${ext}`;
+
+    console.log(req.method, req.originalUrl, fileName);
+
+    file.mv(fileName, (err) => {
+      if (err) {
+        res.status(500).send(err);
+      }
+      else {
+        connection.query(`UPDATE Users SET profileImage = "${uuid}${ext}" WHERE id = ${id}`, (error) => {
+          if (error)
+            res.status(500).send(error);
+          else
+            res.sendStatus(200);
+        });
+      }
+    });
   }
   else {
-    connection.query(`UPDATE Users SET displayName = "${displayName}", selfInformation = "${selfInformation}" WHERE id = ${id}`);
+    res.sendStatus(400);
   }
-
-  res.sendStatus(200);
 });
 
 export default userRouter;
