@@ -10,9 +10,9 @@ const LoginForm = () => {
   const navigate = useNavigate()
   const [error, setError] = useState<string>('')
 
-  const { form, auth, authError } = useSelector(({ auth }: RootState) => ({
+  const { form, id, authError } = useSelector(({ auth }: RootState) => ({
     form: auth.login,
-    auth: auth.auth,
+    id: auth.id,
     authError: auth.authError,
   }))
 
@@ -49,7 +49,6 @@ const LoginForm = () => {
 
   useEffect(() => {
     if (authError) {
-      console.log(authError)
       if (authError.response.status === 400) {
         setError('userName or displayName already have')
 
@@ -58,8 +57,12 @@ const LoginForm = () => {
 
       setError('Internal Server Error')
       return
+    } else {
+      if (id !== -1) {
+        navigate('/')
+      }
     }
-  }, [auth, authError, dispatch])
+  }, [authError, navigate, id])
 
   return (
     <AuthForm

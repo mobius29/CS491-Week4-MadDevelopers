@@ -10,11 +10,13 @@ const RegisterForm = () => {
   const navigate = useNavigate()
   const [error, setError] = useState<string>('')
 
-  const { form, auth, authError } = useSelector(({ auth }: RootState) => ({
-    form: auth.register,
-    auth: auth.auth,
-    authError: auth.authError,
-  }))
+  const { form, authError, registerSuccess } = useSelector(
+    ({ auth }: RootState) => ({
+      form: auth.register,
+      authError: auth.authError,
+      registerSuccess: auth.registerSuccess,
+    })
+  )
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target
@@ -74,13 +76,12 @@ const RegisterForm = () => {
 
       setError('Internal Server Error')
       return
+    } else {
+      if (registerSuccess) {
+        navigate('/login')
+      }
     }
-
-    if (auth) {
-      console.log('Register success')
-      console.log(auth)
-    }
-  }, [auth, authError, dispatch])
+  }, [authError, navigate, registerSuccess])
 
   return (
     <AuthForm

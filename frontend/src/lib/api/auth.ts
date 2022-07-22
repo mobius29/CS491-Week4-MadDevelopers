@@ -6,14 +6,12 @@ interface User {
   password: string
 }
 
-export const login = ({ userName, password }: User) => {
+export const login = ({ userName, password }: User) =>
   client.post('user/login', { userName, password })
-}
 
-export const register = ({ userName, displayName, password }: User) => {
+export const register = ({ userName, displayName, password }: User) =>
   client.post('user/register', {
     userName,
     displayName,
     password,
   })
-}

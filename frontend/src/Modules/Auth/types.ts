@@ -12,9 +12,8 @@ export type State = {
     userName: string
     password: string
   }
-  auth?: {
-    id: number
-  } | null
+  id?: number
+  registerSuccess: boolean
   authError?: any
 }
 

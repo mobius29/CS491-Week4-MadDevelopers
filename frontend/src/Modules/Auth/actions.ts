@@ -27,9 +27,7 @@ export const register = createAction(REGISTER)<{
   password: string
 }>()
 
-export const registerSuccess = createAction(REGISTER_SUCCESS)<{
-  id: number
-}>()
+export const registerSuccess = createAction(REGISTER_SUCCESS)<void>()
 
 export const registerFailure = createAction(REGISTER_FAILURE)<any>()
 

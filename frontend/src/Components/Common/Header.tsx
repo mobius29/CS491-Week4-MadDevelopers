@@ -46,7 +46,9 @@ const HeaderBlock = styled.div`
 const Header = () => {
   return (
     <HeaderBlock>
-      <div className='logo'>Mad-Developers</div>
+      <Link to='/' className='logo'>
+        Mad-Developers
+      </Link>
       <form className='search-bar'>
         <label className='search-text' htmlFor='search-text'>
           <input
@@ -60,7 +62,7 @@ const Header = () => {
         <button className='search-btn'>검색</button>
       </form>
       <nav className='top-nav'>
-        <Link to='login' className='loginBtn'>
+        <Link to='/login' className='loginBtn'>
           login
         </Link>
         <Link to='/register' className='register'>
