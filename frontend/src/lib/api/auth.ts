@@ -9,15 +9,15 @@ interface User {
 }
 
 export const login = ({ userName, password }: User) =>
-  client.post('/user/login', { userName, password })
+  client.post('http://192.249.18.128/user/login', { userName, password })
 
 export const register = ({ userName, displayName, password }: User) =>
-  client.post('/user/register', {
+  client.post('http://192.249.18.128/user/register', {
     userName,
     displayName,
     password,
   })
 
-export const checkLogin = () => client.get('/user/check')
+export const checkLogin = () => client.get('http://192.249.18.128/user/check')
 
-export const logout = () => client.get('/user/logout')
+export const logout = () => client.get('http://192.249.18.128/user/logout')
