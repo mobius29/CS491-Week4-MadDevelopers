@@ -22,17 +22,15 @@ userRouter.post("/register", (req, res) => {
   );
 });
 
-userRouter.get("/login", (req, res) => {
+userRouter.get("/check", (req, res) => {
   if (req.cookies["id"]) {
-    res.status(400).send(req.cookies["id"]);
+    res.status(200).send(req.cookies["id"]);
   } else {
-    res.sendStatus(200);
+    res.status(404).send("-1");
   }
 });
 
 userRouter.post("/login", (req, res) => {
-  console.log(req.cookies);
-
   const userName: string = req.body["userName"];
   const password: string = req.body["password"];
   const passwordSHA = sjcl.hash.sha256.hash(password);
@@ -43,20 +41,28 @@ userRouter.post("/login", (req, res) => {
   connection.query(
     `SELECT id FROM Users WHERE userName = "${userName}" AND hashedPassword = "${hashedPassword}"`,
     (error, rows) => {
-      if (error) res.sendStatus(500);
+      if (error)
+        res.sendStatus(500);
+
       if (rows.length === 1) {
         const userId = rows[0]["id"];
         console.log(userId);
 
-        res.cookie("id", userId, { expires: new Date(Date.now() + 1000 * 60 * 60) });
+        res.cookie("id", userId, {});
 
         res.status(200).send({ data: `${userId}` });
-      } else {
+      }
+      else {
         res.status(404).send();
       }
     }
   );
 });
+
+userRouter.get("/logout", (req, res) => {
+  res.clearCookie("id");
+  res.sendStatus(200);
+})
 
 userRouter.post("/star", (req, res) => {
   if (!req.cookies["id"]) res.send(400);
@@ -67,8 +73,15 @@ userRouter.post("/star", (req, res) => {
   console.log(`${req.method} ${req.originalUrl} ${followerId} ${followingId}`);
 
   connection.query(`INSERT INTO Stars VALUE(${followerId}, ${followingId})`, (error) => {
-    if (error) res.status(500).send(error);
-    else res.sendStatus(200);
+    if (error)
+      res.status(500).send(error);
+
+    connection.query(`UPDATE Users SET starCount = starCount + 1 WHERE id = ${followingId}`, (error) => {
+      if (error)
+        res.status(500).send(error);
+      else
+        res.sendStatus(200);
+    });
   });
 });
 
@@ -77,24 +90,34 @@ userRouter.get("/:id", (req, res) => {
   const id: number = parseInt(req.params.id);
   let starred: boolean = false;
 
-  connection.query(
-    `SELECT displayName, selfInformation, profileImage FROM Users WHERE id = ${id} AND isDeleted = 0`,
-    (error, rows) => {
-      const displayName = rows[0]["displayName"];
-      const selfInformation = rows[0]["selfInformation"];
-      const profileImage = rows[0]["profileImage"];
+  console.log(`${req.method} ${req.originalUrl} ${id}`);
 
-      if (myId !== -1) {
-        connection.query(`SELECT * FROM Stars WHERE followerId = ${myId} AND followingId = ${id}`, (error) => {
-          if (error) {
-            res.status(500).send(error);
-          } else {
-            starred = rows.length === 1;
-            res.send({ displayName, selfInformation, profileImage, star: starred });
-          }
-        });
-      } else {
-        res.send({ displayName, selfInformation, profileImage, star: starred });
+  if (id.toString() === "NaN")
+    res.sendStatus(400);
+
+  connection.query(
+    `SELECT displayName, selfInformation, profileImage, starCount FROM Users WHERE id = ${id} AND isDeleted = 0`,
+    (error, rows) => {
+      if (rows.length === 1) {
+        const displayName = rows[0]["displayName"];
+        const selfInformation = rows[0]["selfInformation"];
+        const profileImage = rows[0]["profileImage"];
+        const starCount = rows[0]["startCount"];
+
+        if (myId !== -1) {
+          connection.query(`SELECT * FROM Stars WHERE followerId = ${myId} AND followingId = ${id}`, (error) => {
+            if (error) {
+              res.status(500).send(error);
+            }
+            else {
+              starred = rows.length === 1;
+            }
+          });
+        }
+        res.send({ user: { displayName, selfInformation, profileImage, starCount, star: starred } });
+      }
+      else {
+        res.sendStatus(404);
       }
     }
   );
