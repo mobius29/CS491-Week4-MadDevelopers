@@ -18,6 +18,8 @@ const initialState = {
   postError: null,
   posts: null,
   getPostsError: null,
+  post: null,
+  getPostError: null,
 }
 
 const reducer = createReducer<State, Action>(initialState, {
@@ -29,6 +31,30 @@ const reducer = createReducer<State, Action>(initialState, {
         draft['write']['tags'][idx]['tag'] = value
       } else draft['write'][key] = value
     }),
+  [actions.GET_POSTS_SUCCESS]: (state, { payload: { posts } }) => ({
+    ...state,
+    posts,
+  }),
+  [actions.GET_POSTS_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    getPostsError: error,
+  }),
+  [actions.GET_POST_SUCCESS]: (state, { payload: { post } }) => ({
+    ...state,
+    post,
+  }),
+  [actions.GET_POST_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    getPostError: error,
+  }),
+  [actions.WRITE_SUCCESS]: (state, { payload: id }) => ({
+    ...state,
+    postId: id,
+  }),
+  [actions.WRITE_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    postError: error,
+  }),
   [actions.ADD_TAG_FIELD]: (state, { payload: id }) => {
     const newTag = { id, tag: '' }
     console.log(newTag)
@@ -49,22 +75,6 @@ const reducer = createReducer<State, Action>(initialState, {
         ...state.write.tags.slice(idx + 1),
       ],
     },
-  }),
-  [actions.GET_POSTS_SUCCESS]: (state, { payload: { posts } }) => ({
-    ...state,
-    posts,
-  }),
-  [actions.GET_POSTS_FAILURE]: (state, { payload: error }) => ({
-    ...state,
-    getPostsError: error,
-  }),
-  [actions.WRITE_SUCCESS]: (state, { payload: id }) => ({
-    ...state,
-    postId: id,
-  }),
-  [actions.WRITE_FAILURE]: (state, { payload: error }) => ({
-    ...state,
-    postError: error,
   }),
 })
 

@@ -4,6 +4,7 @@ interface User {
   id: number
   userName: string
   displayName: string
+  selfInformation: string
   password: string
 }
 
@@ -16,8 +17,6 @@ export const register = ({ userName, displayName, password }: User) =>
     displayName,
     password,
   })
-
-export const getUser = (id: number) => client.get(`/user/${id}`)
 
 export const checkLogin = () => client.get('/user/check')
 

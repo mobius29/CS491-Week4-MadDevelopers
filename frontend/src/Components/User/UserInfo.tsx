@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const UserInfoBlock = styled.div`
@@ -41,6 +42,8 @@ const UserInfoBlock = styled.div`
 `
 
 interface IProps {
+  userId: number
+  id: number
   user: {
     displayName: string
     selfInformation: string
@@ -50,7 +53,7 @@ interface IProps {
   } | null
 }
 
-const UserInfo = ({ user }: IProps) => {
+const UserInfo = ({ userId, id, user }: IProps) => {
   return (
     <>
       {user === null ? (
@@ -60,11 +63,18 @@ const UserInfo = ({ user }: IProps) => {
           <UserInfoBlock>
             <div className='user-info'>
               <div className='profile-image'>Image</div>
-              <div className='profile-name'>{user?.displayName}</div>
-              <div className='profile-introduce'>자기소개가 없습니다.</div>
+              <div className='profile-name'>{user.displayName}</div>
+              <div className='profile-introduce'>{user.selfInformation}</div>
             </div>
 
             <div className='post-list'>게시글 목록</div>
+            {userId === id && (
+              <div>
+                <Link className='update' to={`/user/update/${id}`}>
+                  수정하기
+                </Link>
+              </div>
+            )}
           </UserInfoBlock>
         </>
       )}

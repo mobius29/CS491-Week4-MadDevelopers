@@ -26,6 +26,8 @@ const WritePostBlock = styled.div`
   }
 
   .bottom-btns {
+    display: flex;
+
     margin-top: 1rem;
   }
 `

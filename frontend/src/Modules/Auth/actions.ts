@@ -7,10 +7,6 @@ export const CHECK = 'auth/CHECK' as const
 export const CHECK_SUCCESS = 'auth/CHECK_SUCCESS' as const
 export const CHECK_FAILURE = 'auth/CHECK_FAILURE' as const
 
-export const GET_USER = 'auth/GET_USER' as const
-export const GET_USER_SUCCESS = 'auth/GET_USER_SUCCESS' as const
-export const GET_USER_FAILURE = 'auth/GET_USER_FAILURE' as const
-
 export const REGISTER = 'auth/REGISTER' as const
 export const REGISTER_SUCCESS = 'auth/REGISTER_SUCCESS' as const
 export const REGISTER_FAILURE = 'auth/REGISTER_FAILURE' as const
@@ -35,18 +31,6 @@ export const initializeForm = createAction(INITIALIZE_FORM)<
 export const check = createAction(CHECK)<void>()
 export const checkSuccess = createAction(CHECK_SUCCESS)<number>()
 export const checkFailure = createAction(CHECK_FAILURE)<void>()
-
-export const getUser = createAction(GET_USER)<number>()
-export const getUserSuccess = createAction(GET_USER_SUCCESS)<{
-  user: {
-    displayName: string
-    selfInformation: string
-    profileImage: string
-    star: boolean
-    starCount: number
-  }
-}>()
-export const getUserFailure = createAction(GET_USER_FAILURE)<any>()
 
 export const register = createAction(REGISTER)<{
   userName: string

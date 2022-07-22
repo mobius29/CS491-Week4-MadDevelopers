@@ -2,7 +2,8 @@ import UserInfo from '../../Components/User/UserInfo'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../Modules'
 import { useEffect } from 'react'
-import { getUser, check } from '../../Modules/Auth'
+import { check } from '../../Modules/Auth'
+import { getUser } from '../../Modules/User'
 import { useParams } from 'react-router-dom'
 import Header from '../../Components/Common/Header'
 import Footer from '../../Components/Common/Footer'
@@ -10,8 +11,8 @@ import Footer from '../../Components/Common/Footer'
 const UserInfoContainer = () => {
   const dispatch = useDispatch()
   const { id: userId } = useParams()
-  const { user, id } = useSelector(({ auth }: RootState) => ({
-    user: auth.user,
+  const { user, id } = useSelector(({ auth, user }: RootState) => ({
+    user: user.user,
     id: auth.id,
   }))
 
@@ -24,14 +25,14 @@ const UserInfoContainer = () => {
     dispatch(check())
   }, [dispatch])
 
-  useEffect(() => {
-    console.log(user)
-  }, [user])
-
   return (
     <>
       <Header id={id} />
-      <UserInfo user={user} />
+      <UserInfo
+        userId={userId === undefined ? -1 : parseInt(userId)}
+        id={id}
+        user={user}
+      />
       <Footer />
     </>
   )

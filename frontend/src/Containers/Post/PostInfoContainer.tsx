@@ -4,6 +4,7 @@ import { useEffect } from 'react'
 import { check } from '../../Modules/Auth'
 import Header from '../../Components/Common/Header'
 import Footer from '../../Components/Common/Footer'
+import PostInfo from '../../Components/Post/PostInfo'
 
 const PostInfoContainer = () => {
   const dispatch = useDispatch()
@@ -18,6 +19,7 @@ const PostInfoContainer = () => {
   return (
     <>
       <Header id={id} />
+      <PostInfo />
       <Footer />
     </>
   )

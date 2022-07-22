@@ -43,23 +43,6 @@ const reducer = createReducer<State, Action>(initialState, {
     ...state,
     id: -1,
   }),
-  [actions.GET_USER_SUCCESS]: (state, { payload: { user } }) => {
-    console.log(user)
-    return {
-      ...state,
-      user: user,
-    }
-  },
-  [actions.REGISTER_SUCCESS]: (state) => ({
-    ...state,
-    authError: null,
-    registerSuccess: true,
-  }),
-  [actions.REGISTER_FAILURE]: (state, { payload: error }) => ({
-    ...state,
-    authError: error,
-    registerSuccess: false,
-  }),
   [actions.LOGIN_SUCCESS]: (state, { payload }) => ({
     ...state,
     authError: null,

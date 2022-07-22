@@ -76,6 +76,7 @@ const Header = ({ id }: IProps) => {
         <button className='search-btn'>검색</button>
       </form>
       <nav className='top-nav'>
+        <Link to={'/wiki'}>위키</Link>
         {id === -1 ? (
           <>
             <Link to='/login' className='loginBtn'>
@@ -87,7 +88,6 @@ const Header = ({ id }: IProps) => {
           </>
         ) : (
           <>
-            <Link to={"/wiki"}>위키</Link>
             <Link to={`/user/${id}`}>내 정보</Link>
             <div onClick={() => onClick()}>로그아웃</div>
           </>

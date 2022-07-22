@@ -19,10 +19,12 @@ const PostListContainer = () => {
   const [error, setError] = useState<string>('')
 
   useEffect(() => {
-    dispatch(getPosts())
     dispatch(check())
-    console.log(posts)
-  }, [dispatch, posts])
+  }, [dispatch])
+
+  useEffect(() => {
+    dispatch(getPosts())
+  }, [dispatch])
 
   useEffect(() => {
     if (getPostsError) {

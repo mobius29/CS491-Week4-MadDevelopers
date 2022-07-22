@@ -6,6 +6,7 @@ import PostInfoPage from './Pages/PostInfoPage'
 import PostListPage from './Pages/PostListPage'
 import RegisterPage from './Pages/RegisterPage'
 import UserInfoPage from './Pages/UserInfoPage'
+import UserUpdatePage from './Pages/UserUpdatePage'
 import WikiPage from './Pages/WikiPage'
 import WritePostPage from './Pages/WritePostPage'
 
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/post/write' element={<WritePostPage />} />
         <Route path='/post/:id' element={<PostInfoPage />} />
         <Route path='/user/:id' element={<UserInfoPage />} />
+        <Route path='/user/update/:id' element={<UserUpdatePage />} />
         <Route path='/wiki' element={<WikiPage />} />
       </Routes>
     </div>
