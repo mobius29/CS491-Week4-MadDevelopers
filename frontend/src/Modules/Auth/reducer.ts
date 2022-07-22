@@ -17,6 +17,7 @@ const initialState = {
   id: -1,
   authError: null,
   registerSuccess: false,
+  user: null,
 }
 
 const reducer = createReducer<State, Action>(initialState, {
@@ -34,6 +35,21 @@ const reducer = createReducer<State, Action>(initialState, {
     ...state,
     [payload]: initialState[payload],
   }),
+  [actions.CHECK_SUCCESS]: (state, { payload: id }) => ({
+    ...state,
+    id: id,
+  }),
+  [actions.CHECK_FAILURE]: (state) => ({
+    ...state,
+    id: -1,
+  }),
+  [actions.GET_USER_SUCCESS]: (state, { payload: { user } }) => {
+    console.log(user)
+    return {
+      ...state,
+      user: user,
+    }
+  },
   [actions.REGISTER_SUCCESS]: (state) => ({
     ...state,
     authError: null,
@@ -52,6 +68,10 @@ const reducer = createReducer<State, Action>(initialState, {
   [actions.LOGIN_FAILURE]: (state, { payload: error }) => ({
     ...state,
     authError: error,
+  }),
+  [actions.LOGOUT_SUCCESS]: (state) => ({
+    ...state,
+    id: -1,
   }),
 })
 
