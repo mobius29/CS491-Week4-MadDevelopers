@@ -5,12 +5,14 @@ const postsRouter: Router = Router();
 
 postsRouter.get("/", (req, res) => {
   connection.query(
-    `SELECT id, title, authorId, createdAt, lastUpdated FROM Posts WHERE isDeleted = 0`,
+    `SELECT Posts.id as postId, Users.id as authorId, title, displayName, Posts.createdAt FROM Users INNER JOIN Posts ON Users.id = Posts.authorId`,
     (error, rows) => {
-      if (error) res.status(500).send(error);
-      else res.send(rows);
+      if (error)
+        res.status(500).send(error);
+      else
+        res.send(rows);
     }
-  );
+  )
 });
 
 postsRouter.post("/create", (req, res) => {
@@ -19,7 +21,7 @@ postsRouter.post("/create", (req, res) => {
   const authorId: string = req.body["authorId"];
   const tags: string[] = req.body["tags"];
 
-  console.log(title, content, authorId, tags);
+  console.log(req.method, req.baseUrl, title, content, authorId, tags);
 
   connection.query(
     `INSERT INTO Posts VALUE(NULL, "${title}", "${content}", "${authorId}", DEFAULT, DEFAULT, DEFAULT)`,
