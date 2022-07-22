@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 import { RootState } from '../../Modules'
 import { useEffect } from 'react'
-import { changeField, getUser, update } from '../../Modules/User'
+import { changeField, update } from '../../Modules/User'
 
 const UserUpdateContainer = () => {
   const dispatch = useDispatch()

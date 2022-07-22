@@ -1,4 +1,5 @@
 import { createAction } from 'typesafe-actions'
+import { post } from '../../lib/types'
 
 export const CHANGE_FIELD = 'post/CHANGE_FIELD' as const
 export const INITIALIZE_FORM = 'post/INITIALIZE_FORM' as const
@@ -26,31 +27,13 @@ export const changeField = createAction(CHANGE_FIELD)<{
 
 export const getPosts = createAction(GET_POSTS)<void>()
 export const getPostsSuccess = createAction(GET_POSTS_SUCCESS)<{
-  posts: {
-    id: number
-    title: string
-    content: string
-    tags: {
-      id: number
-      tag: string
-    }[]
-    createdAt: Date
-  }[]
+  posts: post[]
 }>()
 export const getPostsFailure = createAction(GET_POSTS_FAILURE)<any>()
 
 export const getPost = createAction(GET_POST)<number>()
 export const getPostSuccess = createAction(GET_POST_SUCCESS)<{
-  post: {
-    id: number
-    title: string
-    content: string
-    tags: {
-      id: number
-      tag: string
-    }[]
-    createdAt: Date
-  }
+  post: post
 }>()
 export const getPostFailure = createAction(GET_POST_FAILURE)<any>()
 

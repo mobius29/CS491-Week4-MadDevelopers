@@ -1,5 +1,6 @@
 import { ActionType } from 'typesafe-actions'
 import * as actions from './actions'
+import { post } from '../../lib/types'
 
 export type State = {
   postId: number
@@ -12,29 +13,9 @@ export type State = {
     }[]
   }
   postError: any
-  posts:
-    | {
-        id: number
-        title: string
-        content: string
-        tags: {
-          id: number
-          tag: string
-        }[]
-        createdAt: Date
-      }[]
-    | null
+  posts: post[] | null
   getPostsError: any
-  post: {
-    id: number
-    title: string
-    content: string
-    tags: {
-      id: number
-      tag: string
-    }[]
-    createdAt: Date
-  } | null
+  post: post | null
   getPostError: any
 }
 

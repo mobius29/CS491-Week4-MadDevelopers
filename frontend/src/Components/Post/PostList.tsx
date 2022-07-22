@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import { post } from '../../lib/types'
 
 const PostListBlock = styled.div`
   display: flex;
@@ -51,25 +52,15 @@ const BottomBlock = styled.div`
   }
 `
 
-interface Post {
-  id: number
-  title: string
-  content: string
-  tags: {
-    id: number
-    tag: string
-  }[]
-}
-
 interface IProps {
-  posts: Post[] | null
+  posts: post[] | null
   error: string
 }
 
-const PostItem = ({ id, title, content }: Post) => {
+const PostItem = ({ postId, title, content }: post) => {
   return (
     <PostBlock>
-      <Link to={`/post/${id}`}>
+      <Link to={`/post/${postId}`}>
         <div className='post-title'>{title}</div>
         <div className='post-content'>{content}</div>
       </Link>
@@ -80,10 +71,14 @@ const PostItem = ({ id, title, content }: Post) => {
 const PostList = ({ posts, error }: IProps) => {
   const postList = posts?.map((post) => (
     <PostItem
-      id={post.id}
+      key={post.postId}
+      postId={post.postId}
       title={post.title}
       content={post.content}
+      authorId={post.authorId}
+      displayName={post.displayName}
       tags={post.tags}
+      createdAt={post.createdAt}
     />
   ))
 
