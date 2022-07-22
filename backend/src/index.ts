@@ -16,4 +16,6 @@ app.use(fileUpload());
 app.use("/user", userRouter);
 app.use("/posts", postsRouter);
 
-app.listen(80, () => { });
+app.listen(80, () => {
+    console.log("Server running...")
+});

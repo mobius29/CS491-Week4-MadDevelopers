@@ -28,17 +28,19 @@ CREATE TABLE Posts (
 );
 
 CREATE TABLE Tags (
-    tag VARCHAR(100) PRIMARY KEY
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tagId INT NOT NULL,
+    tag VARCHAR(100) NOT NULL
 );
 
 CREATE TABLE PostTags (
     postId INT NOT NULL,
-    tag VARCHAR(100) NOT NULL,
+    tagId INT NOT NULL,
 
     FOREIGN KEY (postId) REFERENCES Posts (id),
-    FOREIGN KEY (tag) REFERENCES Tags (tag),
+    FOREIGN KEY (tagId) REFERENCES Tags (id),
     
-    PRIMARY KEY (postId, tag)
+    PRIMARY KEY (postId, tagId)
 );
 
 CREATE TABLE Stars (

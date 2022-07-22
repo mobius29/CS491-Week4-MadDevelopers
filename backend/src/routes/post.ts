@@ -18,13 +18,23 @@ postsRouter.get("/", (req, res) => {
 
 postsRouter.get("/:id", (req, res) => {
   const postId = req.params.id;
-  connection.query(`SELECT title, authorId, displayName, content, Posts.createdAt as createdAt, lastUpdated FROM Users INNER JOIN Posts ON Users.id = Posts.authorId AND Posts.id = ${postId}`,
-    (error, rows) => {
+  connection.query(
+    `SELECT title, content, authorId, displayName, Posts.createdAt, lastUpdated FROM Posts INNER JOIN Users WHERE Users.id = Posts.id AND Posts.id = ${postId};`,
+    (error, postData) => {
       if (error) {
         res.status(500).send(error);
       }
       else {
-        res.send({ post: rows[0] });
+        connection.query(
+          `SELECT userId, displayName, comment, parentCommentId FROM Comments INNER JOIN Users WHERE userId = Users.id AND postId = ${postId}`,
+          (error, commentData) => {
+            if (error)
+              res.status(500).send(error);
+            const json = postData[0];
+            json["comments"] = commentData;
+            res.send(json);
+          }
+        )
       }
     });
 });
@@ -57,7 +67,9 @@ postsRouter.post("/create", (req, res) => {
 
 postsRouter.post("/comment", (req, res) => {
   const postId = req.body["postId"];
-  const userId = req.body["userId"];
+  if (!req.cookies["id"])
+    res.sendStatus(400);
+  const userId = req.cookies["id"];
   const comment = req.body["comment"];
   const parentCommendId: number | null = req.body["parentCommentId"];
 
