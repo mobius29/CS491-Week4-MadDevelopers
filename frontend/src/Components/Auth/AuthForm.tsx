@@ -2,24 +2,43 @@ import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 
 const AuthFormBlock = styled.div`
+  width: min(100% - 3rem, 600px);
+  display: flex;
+  flex-direction: column;
   h3 {
     margin-bottom: 3rem;
+  }
+
+  .div-btn {
+    display: flex;
+    justify-content: center;
   }
 `
 
 const StyledInput = styled.input`
   font-size: 1rem;
   border: none;
-  border-bottom: 1px solid black;
+  border-radius: 0.5rem;
+  background: #EEEEEE;
   padding-bottom: 0.5rem;
+  padding: 1rem;
   outline: none;
   width: 100%;
   & + & {
     margin-top: 1rem;
   }
 `
+
+const StyledButton = styled.button`
+  margin-top: 2rem;
+  background: cyan;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  padding: 0.5rem 3rem;
+`
+
 const Footer = styled.div`
-  margin-top: 2remm;
+  margin-top: 2rem;
   text-align: right;
 `
 
@@ -90,7 +109,9 @@ const AuthForm = ({ type, form, onChange, onSubmit, error }: IProps) => {
           />
         )}
         {error && <ErrorMessage>{error}</ErrorMessage>}
-        <button>Submit</button>
+        <div className="div-btn">
+          <StyledButton>Submit</StyledButton>
+        </div>
       </form>
       <Footer>
         {type === 'register' ? (
