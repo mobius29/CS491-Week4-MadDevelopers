@@ -17,8 +17,17 @@ postsRouter.get("/", (req, res) => {
 });
 
 postsRouter.get("/:id", (req, res) => {
-  // TODO: Implement Me!!!!
-})
+  const postId = req.params.id;
+  connection.query(`SELECT title, authorId, displayName, content, Posts.createdAt as createdAt, lastUpdated FROM Users INNER JOIN Posts ON Users.id = Posts.authorId AND Posts.id = ${postId}`,
+    (error, rows) => {
+      if (error) {
+        res.status(500).send(error);
+      }
+      else {
+        res.send({ post: rows[0] });
+      }
+    });
+});
 
 postsRouter.post("/create", (req, res) => {
   const title: string = req.body["title"];
