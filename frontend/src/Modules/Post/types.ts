@@ -1,6 +1,6 @@
 import { ActionType } from 'typesafe-actions'
 import * as actions from './actions'
-import { post } from '../../lib/types'
+import { post, comment } from '../../lib/types'
 
 export type State = {
   postId: number
@@ -17,6 +17,8 @@ export type State = {
   getPostsError: any
   post: post | null
   getPostError: any
+  comments: comment[] | null
+  commentPostError: any
 }
 
 export type Action = ActionType<typeof actions>

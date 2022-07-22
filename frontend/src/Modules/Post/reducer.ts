@@ -20,6 +20,8 @@ const initialState = {
   getPostsError: null,
   post: null,
   getPostError: null,
+  comments: null,
+  commentPostError: null,
 }
 
 const reducer = createReducer<State, Action>(initialState, {
@@ -29,8 +31,14 @@ const reducer = createReducer<State, Action>(initialState, {
         const idx = state.write.tags.findIndex((tag) => tag.id === parseInt(id))
 
         draft['write']['tags'][idx]['tag'] = value
-      } else draft['write'][key] = value
+      } else if (key !== 'comment') draft['write'][key] = value
     }),
+  [actions.INITIALIZE_FORM]: (state) => ({
+    ...state,
+    write: initialState['write'],
+    postId: -1,
+    postError: null,
+  }),
   [actions.GET_POSTS_SUCCESS]: (state, { payload: { posts } }) => ({
     ...state,
     posts,
@@ -55,6 +63,22 @@ const reducer = createReducer<State, Action>(initialState, {
     ...state,
     postError: error,
   }),
+  [actions.UPDATE_SUCCESS]: (state, { payload: id }) => ({
+    ...state,
+    postId: id,
+  }),
+  [actions.UPDATE_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    postError: error,
+  }),
+  [actions.DELETE_POST_SUCCESS]: (state) => ({
+    ...state,
+    postId: -1,
+  }),
+  [actions.DELETE_POST_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    postError: error,
+  }),
   [actions.ADD_TAG_FIELD]: (state, { payload: id }) => {
     const newTag = { id, tag: '' }
     console.log(newTag)
@@ -75,6 +99,14 @@ const reducer = createReducer<State, Action>(initialState, {
         ...state.write.tags.slice(idx + 1),
       ],
     },
+  }),
+  [actions.ADD_COMMENT_SUCCESS]: (state) => ({
+    ...state,
+    commentPostError: null,
+  }),
+  [actions.ADD_COMMENT_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    commentPostError: error,
   }),
 })
 

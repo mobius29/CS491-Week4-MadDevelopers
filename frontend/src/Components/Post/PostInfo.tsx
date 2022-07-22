@@ -43,9 +43,10 @@ const PostInfoBlock = styled.div`
 interface IProps {
   post: post | null
   error: string
+  onDelete: (id: number) => void
 }
 
-const PostInfo = ({ post, error }: IProps) => {
+const PostInfo = ({ post, error, onDelete }: IProps) => {
   return (
     <>
       {post === null ? (
@@ -60,6 +61,28 @@ const PostInfo = ({ post, error }: IProps) => {
             <span className='createdAt'>{post.createdAt.toString()}</span>
           </div>
           <div className='content'>{post.content}</div>
+          <div className='btns'>
+            <Link to={`/posts/update/${post.postId}`} className='update-btn'>
+              수정
+            </Link>
+            <button
+              type='button'
+              className='delete-btn'
+              onClick={() => onDelete(post.postId)}
+            >
+              삭제
+            </button>
+          </div>
+          <div className='comments-area'>
+            <form className='add-comment-form'>
+              <input
+                type='text'
+                name='comment'
+                placeholder='댓글을 작성하세요.'
+              />
+              <button type='submit'>작성</button>
+            </form>
+          </div>
         </PostInfoBlock>
       )}
     </>

@@ -1,7 +1,5 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
-import Footer from '../Common/Footer'
-import Header from '../Common/Header'
 import Recommends from './Recommends'
 
 const MainBlock = styled.div`

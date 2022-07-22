@@ -60,7 +60,6 @@ const Tag = ({ id, tag, onChange, removeTags }: TagProps) => {
 }
 
 interface IProps {
-  type: 'write'
   form: {
     title: string
     content: string

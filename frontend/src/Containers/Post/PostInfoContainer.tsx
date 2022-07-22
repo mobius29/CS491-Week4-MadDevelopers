@@ -1,8 +1,9 @@
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../Modules'
 import { useEffect, useState } from 'react'
 import { check } from '../../Modules/Auth'
-import { getPost } from '../../Modules/Post'
+import { getPost, deletePost } from '../../Modules/Post'
 import Header from '../../Components/Common/Header'
 import Footer from '../../Components/Common/Footer'
 import PostInfo from '../../Components/Post/PostInfo'
@@ -19,6 +20,16 @@ const PostInfoContainer = () => {
       getPostError: post.getPostError,
     })
   )
+
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target
+
+    if (name !== 'comment') return
+  }
+
+  const onDelete = (id: number) => {
+    dispatch(deletePost(id))
+  }
 
   useEffect(() => {
     dispatch(check())
@@ -39,7 +50,7 @@ const PostInfoContainer = () => {
   return (
     <>
       <Header id={id} />
-      <PostInfo post={post} error={error} />
+      <PostInfo post={post} error={error} onDelete={onDelete} />
       <Footer />
     </>
   )

@@ -1,18 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import WritePost from '../../Components/Post/WritePost'
 import { RootState } from '../../Modules'
 import {
   addTagField,
-  removeTagField,
   changeField,
-  write,
-} from './../../Modules/Post'
+  initializeForm,
+  removeTagField,
+  update,
+} from '../../Modules/Post'
 
-const WriteForm = () => {
+const UpdateForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { id } = useParams()
   const [error, setError] = useState<string>('')
 
   const { form, postId, postError } = useSelector(({ post }: RootState) => ({
@@ -22,7 +25,8 @@ const WriteForm = () => {
   }))
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value, name } = e.target
+    const { name, value } = e.target
+
     if (name !== 'title' && name !== 'tags') return
 
     if (name === 'tags') {
@@ -72,7 +76,12 @@ const WriteForm = () => {
       if (tag.tag === '') return
     })
 
-    dispatch(write({ title, content, tags }))
+    console.log(title, content, tags)
+
+    if (id !== undefined) {
+      const intId = parseInt(id)
+      dispatch(update({ id: intId, title, content, tags }))
+    }
   }
 
   const addTags = (id: number) => {
@@ -86,18 +95,20 @@ const WriteForm = () => {
   }
 
   useEffect(() => {
-    if (postError) {
-      if (postError.response.status === 500) {
-        setError('Internal Server Error')
+    dispatch(initializeForm())
+  }, [dispatch])
 
-        return
-      }
-    } else {
-      if (postId !== -1) {
-        navigate(`/post/${postId}`)
-      }
+  useEffect(() => {
+    if (postError) {
+      setError('Internal Server Error')
+
+      return
     }
-  }, [postId, postError, navigate])
+
+    if (postId !== -1) {
+      navigate('/posts/:id')
+    }
+  }, [postError, postId, navigate])
 
   return (
     <WritePost
@@ -112,4 +123,4 @@ const WriteForm = () => {
   )
 }
 
-export default WriteForm
+export default UpdateForm

@@ -10,3 +10,11 @@ export type post = {
   }[]
   createdAt: Date
 }
+
+export type comment = {
+  postId: number
+  comment: string
+  parentCommentId: number | null
+  userId: number
+  displayName: string
+}
