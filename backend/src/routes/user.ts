@@ -46,10 +46,7 @@ userRouter.post("/login", (req, res) => {
 
       if (rows.length === 1) {
         const userId = rows[0]["id"];
-        console.log(userId);
-
         res.cookie("id", userId, {});
-
         res.status(200).send({ data: `${userId}` });
       }
       else {
@@ -60,6 +57,7 @@ userRouter.post("/login", (req, res) => {
 });
 
 userRouter.get("/logout", (req, res) => {
+  console.log(req.method, req.originalUrl);
   res.clearCookie("id");
   res.sendStatus(200);
 })
@@ -90,7 +88,7 @@ userRouter.get("/:id", (req, res) => {
   const id: number = parseInt(req.params.id);
   let starred: boolean = false;
 
-  console.log(`${req.method} ${req.originalUrl} ${id}`);
+  console.log(req.method, req.originalUrl);
 
   if (id.toString() === "NaN")
     res.sendStatus(400);
@@ -121,6 +119,23 @@ userRouter.get("/:id", (req, res) => {
       }
     }
   );
+});
+
+userRouter.put("/update/:id", (req, res) => {
+  const id: number = parseInt(req.params.id);
+  const displayName: string = req.body["displayName"];
+  let selfInformation: string = req.body["selfInformation"];
+
+  console.log(req.method, req.originalUrl);
+
+  if (selfInformation.length === 0) {
+    connection.query(`UPDATE Users SET displayName = "${displayName}", selfInformation = NULL WHERE id = ${id}`);
+  }
+  else {
+    connection.query(`UPDATE Users SET displayName = "${displayName}", selfInformation = "${selfInformation}" WHERE id = ${id}`);
+  }
+
+  res.sendStatus(200);
 });
 
 export default userRouter;

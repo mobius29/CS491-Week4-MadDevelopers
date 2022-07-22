@@ -4,16 +4,21 @@ import { connection } from "../connection.js";
 const postsRouter: Router = Router();
 
 postsRouter.get("/", (req, res) => {
+  console.log(req.method, req.originalUrl);
   connection.query(
     `SELECT Posts.id as postId, Users.id as authorId, title, displayName, Posts.createdAt FROM Users INNER JOIN Posts ON Users.id = Posts.authorId`,
     (error, rows) => {
       if (error)
         res.status(500).send(error);
       else
-        res.send(rows);
+        res.send({ posts: rows });
     }
   )
 });
+
+postsRouter.get("/:id", (req, res) => {
+  // TODO: Implement Me!!!!
+})
 
 postsRouter.post("/create", (req, res) => {
   const title: string = req.body["title"];
@@ -36,7 +41,7 @@ postsRouter.post("/create", (req, res) => {
         });
       });
 
-      res.sendStatus(200);
+      res.status(200).send({ id: postId });
     }
   );
 });
