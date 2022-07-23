@@ -2,7 +2,7 @@ import UserInfo from '../../Components/User/UserInfo'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../Modules'
 import { useEffect } from 'react'
-import { check } from '../../Modules/Auth'
+import { check, deleteUser } from '../../Modules/Auth'
 import { getUser } from '../../Modules/User'
 import { useParams } from 'react-router-dom'
 import Header from '../../Components/Common/Header'
@@ -15,6 +15,10 @@ const UserInfoContainer = () => {
     user: user.user,
     id: auth.id,
   }))
+
+  const onDeleteUser = (id: number) => {
+    dispatch(deleteUser({ id }))
+  }
 
   useEffect(() => {
     if (userId === undefined) return
@@ -32,6 +36,7 @@ const UserInfoContainer = () => {
         userId={userId === undefined ? -1 : parseInt(userId)}
         id={id}
         user={user}
+        onDeleteUser={onDeleteUser}
       />
       <Footer />
     </>

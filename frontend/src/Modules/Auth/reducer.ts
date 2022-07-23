@@ -19,6 +19,8 @@ const initialState = {
   checkIdError: null,
   authError: null,
   user: null,
+  deleteUserError: null,
+  deleteUserSuccess: false,
 }
 
 const reducer = createReducer<State, Action>(initialState, {
@@ -35,6 +37,9 @@ const reducer = createReducer<State, Action>(initialState, {
   [actions.INITIALIZE_FORM]: (state, { payload }) => ({
     ...state,
     [payload]: initialState[payload],
+    authError: null,
+    deleteUserError: null,
+    deleteUserSuccess: false,
   }),
   [actions.CHECK_SUCCESS]: (state, { payload: id }) => ({
     ...state,
@@ -69,6 +74,16 @@ const reducer = createReducer<State, Action>(initialState, {
   [actions.LOGOUT_SUCCESS]: (state) => ({
     ...state,
     id: -1,
+  }),
+  [actions.DELETE_USER_SUCCESS]: (state) => ({
+    ...state,
+    id: -1,
+    deleteUserSuccess: true,
+  }),
+  [actions.DELETE_USER_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    deleteUserError: error,
+    deleteUserSuccess: false,
   }),
 })
 

@@ -16,9 +16,12 @@ export type State = {
   }
 
   id: number
-  checkIdError?: any
+  checkIdError: any
 
   authError?: any
+
+  deleteUserError: any
+  deleteUserSuccess: boolean
 }
 
 export type Action = ActionType<typeof actions>

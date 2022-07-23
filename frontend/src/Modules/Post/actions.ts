@@ -1,5 +1,5 @@
 import { createAction } from 'typesafe-actions'
-import { post, comment } from '../../lib/types'
+import { post } from '../../lib/types'
 
 export const CHANGE_FIELD = 'post/CHANGE_FIELD' as const
 export const INITIALIZE_FORM = 'post/INITIALIZE_FORM' as const

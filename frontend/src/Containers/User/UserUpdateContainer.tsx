@@ -5,7 +5,6 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { RootState } from '../../Modules'
 import { useEffect } from 'react'
 import { changeField, update, upload } from '../../Modules/User'
-import axios from 'axios'
 
 const UserUpdateContainer = () => {
   const dispatch = useDispatch()

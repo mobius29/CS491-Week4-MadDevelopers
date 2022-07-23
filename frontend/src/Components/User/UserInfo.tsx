@@ -26,11 +26,16 @@ const UserInfoBlock = styled.div`
       border-radius: 50%;
     }
 
+    .profile-top {
+      display: grid;
+      grid-template-columns: 3fr 1fr;
+    }
+
     .profile-name {
       display: flex;
       align-items: center;
       background: lime;
-      padding-left: 1rem;
+      padding-left: 2rem;
       font-size: 2rem;
     }
 
@@ -45,6 +50,13 @@ const UserInfoBlock = styled.div`
   .post-list {
     margin-top: 2rem;
     margin-left: 1.5rem;
+    height: 1000px;
+  }
+
+  .btn {
+    font-size: 18px;
+    float: right;
+    margin-right: 2rem;
   }
 `
 
@@ -58,9 +70,10 @@ interface IProps {
     star: boolean
     starCount: number
   } | null
+  onDeleteUser: (id: number) => void
 }
 
-const UserInfo = ({ userId, id, user }: IProps) => {
+const UserInfo = ({ userId, id, user, onDeleteUser }: IProps) => {
   return (
     <>
       {user === null ? (
@@ -70,20 +83,38 @@ const UserInfo = ({ userId, id, user }: IProps) => {
           <UserInfoBlock>
             <div className='user-info'>
               <div className='profile-image'>
-                <img alt='profile_image' width='200px' height='200px' />
+                <img
+                  alt='profile_image'
+                  width='200px'
+                  height='200px'
+                  src={`http://192.249.18.176/images/${user.profileImage}`}
+                />
               </div>
-              <div className='profile-name'>{user.displayName}</div>
+              <div className='profile-top'>
+                <div className='profile-name'>{user.displayName}</div>
+                <div className='star'>{user.starCount}</div>
+              </div>
+
               <div className='profile-introduce'>{user.selfInformation}</div>
             </div>
 
             <div className='post-list'>게시글 목록</div>
-            {userId === id && (
-              <div>
-                <Link className='update' to={`/user/update/${id}`}>
-                  수정하기
-                </Link>
-              </div>
-            )}
+            <div className='btns'>
+              {userId === id && (
+                <div>
+                  <button
+                    type='button'
+                    className='btn deleteUser'
+                    onClick={() => onDeleteUser(id)}
+                  >
+                    회원탈퇴
+                  </button>
+                  <Link className='btn updateUser' to={`/user/update/${id}`}>
+                    수정하기
+                  </Link>
+                </div>
+              )}
+            </div>
           </UserInfoBlock>
         </>
       )}

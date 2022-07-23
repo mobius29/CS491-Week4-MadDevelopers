@@ -17,6 +17,15 @@ const GlobalStyle = createGlobalStyle`
   ol, ul, li {
     list-style: none;
   }
+
+  button {
+    border: none;
+  }
+
+  button:focus {
+    border: none;
+    outline: none;
+  }
 `
 
 export default GlobalStyle
