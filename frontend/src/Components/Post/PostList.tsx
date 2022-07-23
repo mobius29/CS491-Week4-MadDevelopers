@@ -75,7 +75,7 @@ const PostItem = ({ post }: { post: post }) => {
         <Link to={`/user/${post.authorId}`}>{post.displayName}</Link>
       </div>
       <div className="post-comments">&#x1F5E8; {post.commentCount}</div>
-      <div className="post-created">{post.createdAt.toString().substring(0, 10)}</div>
+      <div className="post-created">{(new Date(post.createdAt * 1000)).toLocaleDateString()}</div>
     </PostBlock>
   )
 }

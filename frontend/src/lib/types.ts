@@ -9,6 +9,7 @@ export type comment = {
   commentId: number
   parentCommentId: number | null
   comment: string
+  createdAt: number
 }
 
 export type post = {
@@ -20,6 +21,6 @@ export type post = {
   commentCount: number
   tags: tag[]
   comments: comment[]
-  createdAt: Date
-  lastUpdated: Date
+  createdAt: number
+  lastUpdated: number
 }

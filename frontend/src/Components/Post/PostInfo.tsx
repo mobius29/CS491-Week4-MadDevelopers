@@ -265,7 +265,7 @@ const PostInfo = ({
             <Link to={`/user/${post.authorId}`} className='author'>
               author: {post.displayName}
             </Link>
-            <span className='createdAt'>{post.createdAt.toString()}</span>
+            <span className='createdAt'>{(new Date(post.createdAt * 1000)).toLocaleString()}</span>
           </div>
           <div className='contents'>
             <div className='content'>{post.content}</div>
