@@ -13,12 +13,13 @@ type writePost = {
 
 export type State = {
   postId: number
-  write: writePost
-  postError: any
-  postSuccess: boolean
   posts: post[] | null
   getPostsError: any
   post: post | null
+  write: writePost
+  postError: any
+  postSuccess: boolean
+  update: writePost
   getPostError: any
   comments: comment[] | null
   commentWrite: string

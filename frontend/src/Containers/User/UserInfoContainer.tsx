@@ -4,12 +4,13 @@ import { RootState } from '../../Modules'
 import { useEffect } from 'react'
 import { check, deleteUser } from '../../Modules/Auth'
 import { getUser } from '../../Modules/User'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../Components/Common/Header'
 import Footer from '../../Components/Common/Footer'
 
 const UserInfoContainer = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { id: userId } = useParams()
   const { user, id } = useSelector(({ auth, user }: RootState) => ({
     user: user.user,
@@ -17,7 +18,8 @@ const UserInfoContainer = () => {
   }))
 
   const onDeleteUser = (id: number) => {
-    dispatch(deleteUser({ id }))
+    dispatch(deleteUser(id))
+    navigate('/')
   }
 
   useEffect(() => {

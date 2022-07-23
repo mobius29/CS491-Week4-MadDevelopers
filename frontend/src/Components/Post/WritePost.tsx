@@ -77,7 +77,7 @@ const Tag = ({ id, tag, onChange, removeTags }: TagProps) => {
   )
 }
 
-interface Tag {
+interface TagType {
   tagId: number
   tag: string
 }
@@ -86,7 +86,7 @@ interface IProps {
   form: {
     title: string
     content: string
-    tags: Tag[]
+    tags: TagType[]
   }
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onChangeTextArea: (e: React.ChangeEvent<HTMLTextAreaElement>) => void
@@ -96,7 +96,7 @@ interface IProps {
   removeTags: (idx: number) => void
 }
 
-const findMaxTagId = (tags: Tag[]) => {
+const findMaxTagId = (tags: TagType[]) => {
   let maxId = -1
   for (let i = 0; i < tags.length; ++i) {
     if (maxId < tags[i].tagId) {

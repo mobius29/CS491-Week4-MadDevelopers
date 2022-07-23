@@ -22,4 +22,4 @@ export const checkLogin = () => client.get('/user/check')
 
 export const logout = () => client.get('/user/logout')
 
-export const withdrawal = (id: number) => client.get(`/user/delete/${id}`)
+export const withdrawal = (id: number) => client.delete(`/user/delete/${id}`)

@@ -102,13 +102,12 @@ const UserInfo = ({ userId, id, user, onDeleteUser }: IProps) => {
             <div className='btns'>
               {userId === id && (
                 <div>
-                  <button
-                    type='button'
+                  <div
                     className='btn deleteUser'
                     onClick={() => onDeleteUser(id)}
                   >
                     회원탈퇴
-                  </button>
+                  </div>
                   <Link className='btn updateUser' to={`/user/update/${id}`}>
                     수정하기
                   </Link>

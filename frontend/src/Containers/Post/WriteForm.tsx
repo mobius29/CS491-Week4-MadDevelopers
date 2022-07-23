@@ -30,6 +30,7 @@ const WriteForm = () => {
       const { id } = e.target
       dispatch(
         changeField({
+          form: 'write',
           key: name,
           value,
           id: id,
@@ -38,6 +39,7 @@ const WriteForm = () => {
     } else {
       dispatch(
         changeField({
+          form: 'write',
           key: name,
           value,
           id: '-1',
@@ -51,6 +53,7 @@ const WriteForm = () => {
     if (name !== 'content') return
     dispatch(
       changeField({
+        form: 'write',
         key: name,
         value,
         id: '-1',
@@ -81,17 +84,30 @@ const WriteForm = () => {
   }
 
   const addTags = (id: number) => {
-    dispatch(addTagField(id))
+    dispatch(addTagField({ form: 'write', tagId: id }))
   }
 
   const removeTags = (id: number) => {
     const { tags } = form
     const idx = tags.findIndex((tag) => tag.tagId === id)
-    dispatch(removeTagField(idx))
+    dispatch(removeTagField({ form: 'write', idx }))
   }
 
   useEffect(() => {
-    dispatch(initializeForm())
+    dispatch(
+      initializeForm({
+        value: {
+          title: '',
+          content: '',
+          tags: [
+            {
+              tagId: 0,
+              tag: '',
+            },
+          ],
+        },
+      })
+    )
   }, [dispatch])
 
   useEffect(() => {

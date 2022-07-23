@@ -23,7 +23,7 @@ const UpdateForm = () => {
   const { post, form, postError, postSuccess } = useSelector(
     ({ post }: RootState) => ({
       post: post.post,
-      form: post.write,
+      form: post.update,
       postError: post.postError,
       postSuccess: post.postSuccess,
     })
@@ -38,6 +38,7 @@ const UpdateForm = () => {
       const { id } = e.target
       dispatch(
         changeField({
+          form: 'update',
           key: name,
           value,
           id: id,
@@ -46,6 +47,7 @@ const UpdateForm = () => {
     } else {
       dispatch(
         changeField({
+          form: 'update',
           key: name,
           value,
           id: '-1',
@@ -59,6 +61,7 @@ const UpdateForm = () => {
     if (name !== 'content') return
     dispatch(
       changeField({
+        form: 'update',
         key: name,
         value,
         id: '-1',
@@ -90,31 +93,30 @@ const UpdateForm = () => {
   }
 
   const addTags = (id: number) => {
-    dispatch(addTagField(id))
+    dispatch(addTagField({ form: 'update', tagId: id }))
   }
 
   const removeTags = (id: number) => {
     const { tags } = form
     const idx = tags.findIndex((tag) => tag.tagId === id)
-    dispatch(removeTagField(idx))
+    dispatch(removeTagField({ form: 'update', idx }))
   }
-
-  useEffect(() => {
-    dispatch(initializeForm())
-  }, [dispatch])
 
   useEffect(() => {
     dispatch(getPost(postId))
   }, [dispatch, postId])
 
   useEffect(() => {
-    if (post !== null) {
-      // console.log(post)
-      form.title = post.title
-      form.content = post.content
-      form.tags = post.tags
-    }
-  }, [post, form])
+    dispatch(
+      initializeForm({
+        value: {
+          title: post?.title!,
+          content: post?.content!,
+          tags: post?.tags!,
+        },
+      })
+    )
+  }, [post, dispatch])
 
   useEffect(() => {
     if (postError) {
@@ -124,7 +126,7 @@ const UpdateForm = () => {
     }
 
     if (postSuccess) {
-      navigate(`/posts/${postId}`)
+      navigate(`/post/${postId}`)
     }
   }, [postError, postSuccess, postId, navigate])
 

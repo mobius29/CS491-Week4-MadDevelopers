@@ -36,11 +36,21 @@ export const ADD_COMMENT_SUCCESS = 'post/ADD_COMMENT_SUCCESS' as const
 export const ADD_COMMENT_FAILURE = 'post/ADD_COMMENT_FAILURE' as const
 
 export const changeField = createAction(CHANGE_FIELD)<{
+  form: 'write' | 'update' | 'comment'
   key: 'title' | 'content' | 'tags' | 'comment'
   value: string
   id: string
 }>()
-export const initializeForm = createAction(INITIALIZE_FORM)<void>()
+export const initializeForm = createAction(INITIALIZE_FORM)<{
+  value: {
+    title: string
+    content: string
+    tags: {
+      tagId: number
+      tag: string
+    }[]
+  }
+}>()
 
 export const getPosts = createAction(GET_POSTS)<void>()
 export const getPostsSuccess = createAction(GET_POSTS_SUCCESS)<{
@@ -88,8 +98,14 @@ export const deletePost = createAction(DELETE_POST)<number>()
 export const deletePostSuccess = createAction(DELETE_POST_SUCCESS)<void>()
 export const deletePostFailure = createAction(DELETE_POST_FAILURE)<any>()
 
-export const addTagField = createAction(ADD_TAG_FIELD)<number>()
-export const removeTagField = createAction(REMOVE_TAG_FIELD)<number>()
+export const addTagField = createAction(ADD_TAG_FIELD)<{
+  form: 'write' | 'update'
+  tagId: number
+}>()
+export const removeTagField = createAction(REMOVE_TAG_FIELD)<{
+  form: 'write' | 'update'
+  idx: number
+}>()
 
 export const addComment = createAction(ADD_COMMENT)<{
   postId: number

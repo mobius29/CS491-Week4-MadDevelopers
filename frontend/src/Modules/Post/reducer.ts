@@ -3,17 +3,20 @@ import { Action, State } from './types'
 import * as actions from './actions'
 import produce from 'immer'
 
+const initialPostState = {
+  title: '',
+  content: '',
+  tags: [
+    {
+      tagId: 0,
+      tag: '',
+    },
+  ],
+}
+
 const initialState = {
-  write: {
-    title: '',
-    content: '',
-    tags: [
-      {
-        tagId: 0,
-        tag: '',
-      },
-    ],
-  },
+  write: initialPostState,
+  update: initialPostState,
   postId: -1,
   postError: null,
   postSuccess: false,
@@ -21,6 +24,8 @@ const initialState = {
   getPostsError: null,
   post: null,
   getPostError: null,
+  updateError: null,
+  updateSuccess: false,
   comments: null,
   commentWrite: '',
   commentPostError: null,
@@ -28,20 +33,25 @@ const initialState = {
 }
 
 const reducer = createReducer<State, Action>(initialState, {
-  [actions.CHANGE_FIELD]: (state, { payload: { key, value, id } }) =>
+  [actions.CHANGE_FIELD]: (state, { payload: { form, key, value, id } }) =>
     produce(state, (draft) => {
-      if (key === 'tags') {
-        const idx = state.write.tags.findIndex(
-          (tag) => tag.tagId === parseInt(id)
-        )
-
-        draft['write']['tags'][idx]['tag'] = value
-      } else if (key !== 'comment') draft['write'][key] = value
-      else if (key === 'comment') draft['commentWrite'] = value
+      if (form === 'write' || form === 'update') {
+        if (key === 'tags') {
+          const idx = state[form].tags.findIndex(
+            (tag) => tag.tagId === parseInt(id)
+          )
+          draft[form][key][idx]['tag'] = value
+        } else if (key !== 'comment') {
+          draft[form][key] = value
+        }
+      } else {
+        draft['commentWrite'] = value
+      }
     }),
-  [actions.INITIALIZE_FORM]: (state) => ({
+  [actions.INITIALIZE_FORM]: (state, { payload: { value } }) => ({
     ...state,
-    write: initialState['write'],
+    write: value,
+    update: value,
     postId: -1,
     postError: null,
     postSuccess: false,
@@ -80,10 +90,12 @@ const reducer = createReducer<State, Action>(initialState, {
   [actions.UPDATE_SUCCESS]: (state, { payload: { id } }) => ({
     ...state,
     postId: id,
+    postSuccess: true,
   }),
   [actions.UPDATE_FAILURE]: (state, { payload: error }) => ({
     ...state,
     postError: error,
+    postSuccess: false,
   }),
   [actions.DELETE_POST_SUCCESS]: (state) => ({
     ...state,
@@ -93,24 +105,24 @@ const reducer = createReducer<State, Action>(initialState, {
     ...state,
     postError: error,
   }),
-  [actions.ADD_TAG_FIELD]: (state, { payload: tagId }) => {
+  [actions.ADD_TAG_FIELD]: (state, { payload: { form, tagId } }) => {
     const newTag = { tagId, tag: '' }
     console.log(newTag)
     return {
       ...state,
-      write: {
-        ...state.write,
-        tags: [...state.write.tags, newTag],
+      [form]: {
+        ...state[form],
+        tags: [...state[form].tags, newTag],
       },
     }
   },
-  [actions.REMOVE_TAG_FIELD]: (state, { payload: idx }) => ({
+  [actions.REMOVE_TAG_FIELD]: (state, { payload: { form, idx } }) => ({
     ...state,
-    write: {
-      ...state.write,
+    [form]: {
+      ...state[form],
       tags: [
-        ...state.write.tags.slice(0, idx),
-        ...state.write.tags.slice(idx + 1),
+        ...state[form].tags.slice(0, idx),
+        ...state[form].tags.slice(idx + 1),
       ],
     },
   }),

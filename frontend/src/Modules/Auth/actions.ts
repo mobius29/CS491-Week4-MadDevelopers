@@ -58,8 +58,6 @@ export const loginFailure = createAction(LOGIN_FAILURE)<any>()
 export const logout = createAction(LOGOUT)<void>()
 export const logoutSuccess = createAction(LOGOUT_SUCCESS)<void>()
 
-export const deleteUser = createAction(DELETE_USER)<{
-  id: number
-}>()
+export const deleteUser = createAction(DELETE_USER)<number>()
 export const deleteUserSuccess = createAction(DELETE_USER_SUCCESS)<void>()
 export const deleteUserFailure = createAction(DELETE_USER_FAILURE)<any>()

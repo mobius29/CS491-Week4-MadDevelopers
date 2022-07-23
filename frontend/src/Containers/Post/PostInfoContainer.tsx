@@ -12,10 +12,11 @@ import {
 import Header from '../../Components/Common/Header'
 import Footer from '../../Components/Common/Footer'
 import PostInfo from '../../Components/Post/PostInfo'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 const PostInfoContainer = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { id: postIdString } = useParams()
   const postId = parseInt(postIdString!)
   const [error, setError] = useState<string>('')
@@ -36,7 +37,7 @@ const PostInfoContainer = () => {
 
     if (name !== 'comment') return
 
-    dispatch(changeField({ key: name, value, id: '-1' }))
+    dispatch(changeField({ form: 'comment', key: name, value, id: '-1' }))
   }
 
   const onChangeParentCommentId = (parentId: number) => {
@@ -48,7 +49,9 @@ const PostInfoContainer = () => {
   }
 
   const onDelete = (id: number) => {
+    console.log(id)
     dispatch(deletePost(id))
+    navigate('/posts')
   }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

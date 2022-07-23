@@ -1,7 +1,9 @@
+import React from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { logout } from '../../Modules/Auth'
+import { useState } from 'react'
 
 const HeaderBlock = styled.div`
   display: flex;
@@ -52,7 +54,28 @@ interface IProps {
 const Header = ({ id }: IProps) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const [searchValue, setSearchValue] = useState<string>('')
 
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target
+
+    setSearchValue(value)
+  }
+
+  const onSearchClick = () => {
+    if (searchValue === '') {
+      alert('빈 칸은 허용하지 않습니다.')
+      return
+    }
+
+    navigate(`/posts/results?search=${searchValue}/1`)
+  }
+
+  const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onClick()
+    }
+  }
   const onClick = () => {
     dispatch(logout())
     navigate('/')
@@ -63,7 +86,7 @@ const Header = ({ id }: IProps) => {
       <Link to='/' className='logo'>
         Mad-Developers
       </Link>
-      <form className='search-bar'>
+      <div className='search-bar'>
         <label className='search-text' htmlFor='search-text'>
           <input
             type='text'
@@ -71,10 +94,15 @@ const Header = ({ id }: IProps) => {
             name='search-text'
             id='search-text'
             placeholder='search'
+            value={searchValue}
+            onChange={onChange}
+            onKeyDown={onKeyDown}
           />
         </label>
-        <button className='search-btn'>검색</button>
-      </form>
+        <button type='button' className='search-btn' onClick={onSearchClick}>
+          검색
+        </button>
+      </div>
       <nav className='top-nav'>
         <Link to={'/wiki'}>위키</Link>
         {id === -1 ? (

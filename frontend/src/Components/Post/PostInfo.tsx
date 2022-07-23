@@ -253,10 +253,7 @@ const PostInfo = ({
               <Link to={`/post/update/${postId}`} className='btn update-btn'>
                 수정
               </Link>
-              <div
-                className='btn delete-btn'
-                onClick={() => onDelete(post.postId)}
-              >
+              <div className='btn delete-btn' onClick={() => onDelete(postId)}>
                 삭제
               </div>
             </div>
@@ -265,7 +262,9 @@ const PostInfo = ({
             <Link to={`/user/${post.authorId}`} className='author'>
               author: {post.displayName}
             </Link>
-            <span className='createdAt'>{(new Date(post.createdAt * 1000)).toLocaleString()}</span>
+            <span className='createdAt'>
+              {new Date(post.createdAt * 1000).toLocaleString()}
+            </span>
           </div>
           <div className='contents'>
             <div className='content'>{post.content}</div>
