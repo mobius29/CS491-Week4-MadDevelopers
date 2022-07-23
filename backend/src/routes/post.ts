@@ -11,14 +11,20 @@ interface TagItem {
 postsRouter.get('/', (req, res) => {
   console.log(req.method, req.originalUrl)
   connection.query(`
-SELECT Posts.id as postId, 
-       Users.id as authorId,
-       title, 
-       displayName, 
-       Posts.createdAt 
-FROM   Users 
-       INNER JOIN Posts 
-                  ON Users.id = Posts.authorId`,
+SELECT
+    p.id as postId,
+    u.id as authorId,
+    p.title,
+    u.displayName,
+    p.createdAt,
+    p.lastUpdated,
+    (SELECT COUNT(*) FROM Comments c WHERE c.postid = p.id) as commentCount
+FROM
+    Users u
+INNER JOIN 
+    Posts p
+ON
+    u.id = p.authorId;`,
     (error, rows) => {
       if (error) res.status(500).send(error)
       else res.send({ posts: rows })
