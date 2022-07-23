@@ -1,10 +1,9 @@
-import { CookieOptions, Router, Request, Response } from "express";
+import { Router, Request, Response } from "express";
 import sjcl from "sjcl";
 import { connection } from "../connection.js";
 import { v4 as uuidv4 } from "uuid";
 import fileUpload from "express-fileupload";
 import fs from "fs";
-import path from "path";
 
 const userRouter: Router = Router();
 
@@ -25,7 +24,7 @@ userRouter.post("/register", (req: Request, res: Response) => {
   console.log(`${req.method} ${req.originalUrl} ${userName} ${hashedPassword} ${displayName}`);
 
   connection.query(
-    `INSERT INTO Users VALUE(NULL, "${userName}", "${hashedPassword}", "${displayName}", DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT, DEFAULT)`,
+    `INSERT INTO Users VALUE(NULL, "${userName}", "${hashedPassword}", "${displayName}", DEFAULT, "default.svg", DEFAULT, DEFAULT, DEFAULT)`,
     (error) => {
       if (error) res.status(400).send(error);
       else res.status(200).send();
@@ -81,17 +80,7 @@ userRouter.post("/star", (req, res) => {
 
   console.log(`${req.method} ${req.originalUrl} ${followerId} ${followingId}`);
 
-  connection.query(`INSERT INTO Stars VALUE(${followerId}, ${followingId})`, (error) => {
-    if (error)
-      res.status(500).send(error);
-
-    connection.query(`UPDATE Users SET starCount = starCount + 1 WHERE id = ${followingId}`, (error) => {
-      if (error)
-        res.status(500).send(error);
-      else
-        res.sendStatus(200);
-    });
-  });
+  connection.query(`INSERT INTO Stars VALUE(${followerId}, ${followingId})`);
 });
 
 userRouter.get("/:id", (req, res) => {
@@ -105,13 +94,12 @@ userRouter.get("/:id", (req, res) => {
     res.sendStatus(400);
 
   connection.query(
-    `SELECT displayName, selfInformation, profileImage, starCount FROM Users WHERE id = ${id} AND isDeleted = 0`,
+    `SELECT displayName, selfInformation, profileImage FROM Users WHERE id = ${id} AND isDeleted = 0`,
     (error, rows) => {
       if (rows.length === 1) {
         const displayName = rows[0]["displayName"];
         const selfInformation = rows[0]["selfInformation"];
         const profileImage = rows[0]["profileImage"];
-        const starCount = rows[0]["startCount"];
 
         if (myId !== -1) {
           connection.query(`SELECT * FROM Stars WHERE followerId = ${myId} AND followingId = ${id}`, (error) => {
@@ -123,7 +111,7 @@ userRouter.get("/:id", (req, res) => {
             }
           });
         }
-        res.send({ user: { displayName, selfInformation, profileImage, starCount, star: starred } });
+        res.send({ user: { displayName, selfInformation, profileImage, star: starred } });
       }
       else {
         res.sendStatus(404);
@@ -187,6 +175,12 @@ userRouter.put("/upload/:id", (req: Request, res: Response) => {
   else {
     res.sendStatus(400);
   }
+});
+
+userRouter.delete("/delete/:id", (req, res) => {
+  console.log(req.method, req.originalUrl);
+  connection.query(`UPDATE Users SET isDeleted = 1 WHERE id = ${req.params.id}`);
+  res.sendStatus(200);
 });
 
 export default userRouter;

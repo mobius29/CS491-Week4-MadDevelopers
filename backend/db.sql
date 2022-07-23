@@ -8,11 +8,10 @@ CREATE TABLE Users (
     hashedPassword VARCHAR(300) NOT NULL,
     displayName VARCHAR(35) NOT NULL UNIQUE,
     selfInformation VARCHAR(330),
-    profileImage VARCHAR(100) UNIQUE,
-    createdAt TIMESTAMP NOT NULL DEFAULT current_timestamp(),
+    profileImage VARCHAR(100) NOT NULL DEFAULT "default.svg",
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     isAdmin TINYINT NOT NULL DEFAULT 0,
-    isDeleted TINYINT NOT NULL DEFAULT 0,
-    starCount INT NOT NULL DEFAULT 0
+    isDeleted TINYINT NOT NULL DEFAULT 0
 );
 
 CREATE TABLE Posts (
@@ -20,11 +19,11 @@ CREATE TABLE Posts (
     title VARCHAR(100) NOT NULL,
     content TEXT NOT NULL,
     authorId INT NOT NULL,
-    createdAt TIMESTAMP NOT NULL DEFAULT current_timestamp(),
-    lastUpdated TIMESTAMP NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    lastUpdated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     isDeleted TINYINT NOT NULL DEFAULT 0,
   
-    FOREIGN KEY (authorId) REFERENCES Users (id)
+    FOREIGN KEY (authorId) REFERENCES Users (id) ON DELETE CASCADE
 );
 
 CREATE TABLE Tags (
@@ -37,8 +36,8 @@ CREATE TABLE PostTags (
     postId INT NOT NULL,
     tagId INT NOT NULL,
 
-    FOREIGN KEY (postId) REFERENCES Posts (id),
-    FOREIGN KEY (tagId) REFERENCES Tags (id),
+    FOREIGN KEY (postId) REFERENCES Posts (id) ON DELETE CASCADE,
+    FOREIGN KEY (tagId) REFERENCES Tags (id) ON DELETE CASCADE,
     
     PRIMARY KEY (postId, tagId)
 );
@@ -47,8 +46,8 @@ CREATE TABLE Stars (
     followerId INT,
     followingId INT,
 
-    FOREIGN KEY (followerId) REFERENCES Users(id),
-    FOREIGN KEY (followingId) REFERENCES Users(id),
+    FOREIGN KEY (followerId) REFERENCES Users(id) ON DELETE CASCADE,
+    FOREIGN KEY (followingId) REFERENCES Users(id) ON DELETE CASCADE,
 
     PRIMARY KEY (followerId, followingId)
 );
@@ -58,8 +57,9 @@ CREATE TABLE Comments (
     postId INT NOT NULL,
     userId INT NOT NULL,
     comment TEXT NOT NULL,
+    createdAt TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     parentCommentId INT DEFAULT NULL,
 
-    FOREIGN KEY (postId) REFERENCES Posts(id),
-    FOREIGN KEY (userId) REFERENCES Users(id)
+    FOREIGN KEY (postId) REFERENCES Posts(id) ON DELETE CASCADE,
+    FOREIGN KEY (userId) REFERENCES Users(id) ON DELETE CASCADE
 );
