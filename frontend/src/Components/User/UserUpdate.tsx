@@ -57,18 +57,30 @@ interface IProps {
   }
   error: string
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
+  onChangeImage: (e: React.ChangeEvent<HTMLInputElement>) => void
   onSubmit: (e: React.FormEvent<HTMLFormElement>) => void
 }
 
-const UserUpdate = ({ form, error, onChange, onSubmit }: IProps) => {
+const UserUpdate = ({
+  form,
+  error,
+  onChange,
+  onChangeImage,
+  onSubmit,
+}: IProps) => {
   return (
     <UserUpdateBlock>
+      <div className='profileImage'>ProfileImage</div>
+      <div className='input-div'>
+        <div className='input-label'>프로필 사진</div>
+        <input
+          type='file'
+          name='file'
+          placeholder='profile_image'
+          onChange={onChangeImage}
+        />
+      </div>
       <form onSubmit={onSubmit}>
-        <div className='profileImage'>ProfileImage</div>
-        <div className='input-div'>
-          <div className='input-label'>프로필 사진</div>
-          <input type="file" />
-        </div>
         <div className='input-div'>
           <div className='input-label'>닉네임</div>
           <input

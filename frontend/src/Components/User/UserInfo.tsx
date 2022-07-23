@@ -13,7 +13,7 @@ const UserInfoBlock = styled.div`
     grid-auto-rows: 150px;
     background: blue;
 
-    .profile-image{
+    .profile-image {
       display: flex;
       justify-content: center;
       align-items: center;
@@ -70,8 +70,7 @@ const UserInfo = ({ userId, id, user }: IProps) => {
           <UserInfoBlock>
             <div className='user-info'>
               <div className='profile-image'>
-                <img alt={user.profileImage} width="200px" height="200px" src="">
-                </img>
+                <img alt='profile_image' width='200px' height='200px' />
               </div>
               <div className='profile-name'>{user.displayName}</div>
               <div className='profile-introduce'>{user.selfInformation}</div>

@@ -13,12 +13,13 @@ const initialState = {
     selfInformation: '',
   },
   form: {
-    profileImage: '',
     displayName: '',
     selfInformation: '',
   },
   updateSuccess: false,
   updateError: null,
+  uploadSuccess: false,
+  uploadError: null,
 }
 
 const reducer = createReducer<State, Action>(initialState, {
@@ -27,6 +28,8 @@ const reducer = createReducer<State, Action>(initialState, {
     form: initialState['form'],
     updateSuccess: false,
     updateError: null,
+    uploadSuccess: false,
+    uploadError: null,
   }),
   [actions.CHANGE_FIELD]: (state, { payload: { key, value } }) =>
     produce(state, (draft) => {
@@ -49,6 +52,16 @@ const reducer = createReducer<State, Action>(initialState, {
   [actions.GET_USER_SUCCESS]: (state, { payload: { user } }) => ({
     ...state,
     user: user,
+  }),
+  [actions.UPLOAD_SUCCESS]: (state) => ({
+    ...state,
+    uploadSuccess: true,
+    uploadError: null,
+  }),
+  [actions.UPLOAD_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    uploadSuccess: false,
+    uploadError: error,
   }),
 })
 

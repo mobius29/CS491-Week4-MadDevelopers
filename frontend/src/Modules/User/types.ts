@@ -11,12 +11,13 @@ export type State = {
     selfInformation: string
   } | null
   form: {
-    profileImage: string
     displayName: string
     selfInformation: string
   }
   updateSuccess: boolean
   updateError: any
+  uploadSuccess: boolean
+  uploadError: any
 }
 
 export type Action = ActionType<typeof actions>
