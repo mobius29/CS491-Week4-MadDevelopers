@@ -6,7 +6,6 @@ const PostListBlock = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 700px;
 
   background: red;
 `
@@ -15,22 +14,16 @@ const PostBlock = styled.div`
   display: flex;
   flex-direction: column;
   width: 80%;
+  height: 100px;
   margin: 0 auto;
   margin-top: 0.5rem;
   padding-left: 1rem;
+  background: yellowgreen;
 
-  .title {
+  .post-title {
     width: 100%;
-    height: 30px;
-    font-size: 1.5rem;
+    font-size: 2rem;
     font-weight: bold;
-  }
-
-  .content {
-    width: 100%;
-    height: 60px;
-    margin-top: 0.5rem;
-    font-size: 1rem;
   }
 `
 
@@ -62,8 +55,8 @@ const PostItem = ({ post }: { post: post }) => {
     <PostBlock>
       <Link to={`/post/${post.postId}`}>
         <div className='post-title'>{post.title}</div>
-        <div className='post-content'>{post.content}</div>
       </Link>
+      <h1>Hi</h1>
     </PostBlock>
   )
 }
