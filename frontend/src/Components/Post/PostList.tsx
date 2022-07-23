@@ -5,25 +5,40 @@ import { post } from '../../lib/types'
 const PostListBlock = styled.div`
   display: flex;
   flex-direction: column;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   width: 100%;
-
-  background: red;
 `
 
 const PostBlock = styled.div`
-  display: flex;
-  flex-direction: column;
+  display: grid;
   width: 80%;
-  height: 100px;
-  margin: 0 auto;
-  margin-top: 0.5rem;
-  padding-left: 1rem;
-  background: yellowgreen;
+  height: 120px;
+  margin: 0.5rem auto;
+  padding: 10px;
+  border: solid blueviolet 1px;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: auto 100px;
 
   .post-title {
-    width: 100%;
-    font-size: 2rem;
-    font-weight: bold;
+    grid-row: 1;
+    grid-column: 1;
+    font-size: 1.5rem;
+  }
+
+  .post-author {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .post-comments {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .post-created {
+    grid-row: 1;
+    grid-column: 2;
+    text-align: right;
   }
 `
 
@@ -56,7 +71,11 @@ const PostItem = ({ post }: { post: post }) => {
       <Link to={`/post/${post.postId}`}>
         <div className='post-title'>{post.title}</div>
       </Link>
-      <h1>Hi</h1>
+      <div className="post-author">
+        <Link to={`/user/${post.authorId}`}>{post.displayName}</Link>
+      </div>
+      <div className="post-comments">&#x1F5E8; {post.commentCount}</div>
+      <div className="post-created">{post.createdAt.toString().substring(0, 10)}</div>
     </PostBlock>
   )
 }

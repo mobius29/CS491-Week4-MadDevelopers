@@ -17,6 +17,7 @@ export type post = {
   content: string
   authorId: number
   displayName: string
+  commentCount: number
   tags: tag[]
   comments: comment[]
   createdAt: Date
