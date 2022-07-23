@@ -20,9 +20,14 @@ const UserUpdateBlock = styled.div`
     margin: 2rem auto 0 auto;
     height: 2.5rem;
   }
+
+  .input-div input {
+    margin: 0 2rem;
+  }
+
   .input-label {
     display: inline-block;
-    width: 5rem;
+    width: 6rem;
     margin-left: 2rem;
     text-align: center;
   }
@@ -37,6 +42,7 @@ const UserUpdateBlock = styled.div`
   .btns {
     margin: 2rem auto 0 auto;
   }
+
   .btn {
     width: 5rem;
     height: 2rem;
@@ -59,6 +65,10 @@ const UserUpdate = ({ form, error, onChange, onSubmit }: IProps) => {
     <UserUpdateBlock>
       <form onSubmit={onSubmit}>
         <div className='profileImage'>ProfileImage</div>
+        <div className='input-div'>
+          <div className='input-label'>프로필 사진</div>
+          <input type="file" />
+        </div>
         <div className='input-div'>
           <div className='input-label'>닉네임</div>
           <input

@@ -13,17 +13,23 @@ const UserInfoBlock = styled.div`
     grid-auto-rows: 150px;
     background: blue;
 
-    .profile-image {
+    .profile-image{
       display: flex;
       justify-content: center;
       align-items: center;
-
+      background: red;
       grid-row-start: 1;
       grid-row-end: 3;
     }
+
+    .profile-image img {
+      border-radius: 50%;
+    }
+
     .profile-name {
       display: flex;
       align-items: center;
+      background: lime;
       padding-left: 1rem;
       font-size: 2rem;
     }
@@ -32,6 +38,7 @@ const UserInfoBlock = styled.div`
       padding-top: 1rem;
       padding-left: 1rem;
       font-size: 1.125rem;
+      background: yellow;
     }
   }
 
@@ -62,7 +69,10 @@ const UserInfo = ({ userId, id, user }: IProps) => {
         <>
           <UserInfoBlock>
             <div className='user-info'>
-              <div className='profile-image'>Image</div>
+              <div className='profile-image'>
+                <img alt={user.profileImage} width="200px" height="200px" src="">
+                </img>
+              </div>
               <div className='profile-name'>{user.displayName}</div>
               <div className='profile-introduce'>{user.selfInformation}</div>
             </div>
