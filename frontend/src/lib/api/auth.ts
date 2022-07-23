@@ -21,3 +21,5 @@ export const register = ({ userName, displayName, password }: User) =>
 export const checkLogin = () => client.get('/user/check')
 
 export const logout = () => client.get('/user/logout')
+
+export const withdrawal = (id: number) => client.get(`/user/delete/${id}`)
