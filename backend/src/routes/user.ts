@@ -1,12 +1,14 @@
-import { CookieOptions, Router } from "express";
-import fileUpload from "express-fileupload";
+import { CookieOptions, Router, Request, Response } from "express";
 import sjcl from "sjcl";
 import { connection } from "../connection.js";
 import { v4 as uuidv4 } from "uuid";
+import fileUpload from "express-fileupload";
+import multer from "multer";
+
 
 const userRouter: Router = Router();
 
-userRouter.post("/register", (req, res) => {
+userRouter.post("/register", (req: Request, res: Response) => {
   const userName: string = req.body["userName"];
   const password: string = req.body["password"];
   const passwordSHA = sjcl.hash.sha256.hash(password);
@@ -129,28 +131,27 @@ userRouter.put("/update/:id", (req, res) => {
   let selfInformation: string = req.body["selfInformation"];
 
   console.log(req.method, req.originalUrl);
+  console.log(displayName, selfInformation);
 
   connection.query(
     `UPDATE Users SET displayName = "${displayName}", selfInformation = "${selfInformation}" WHERE id = ${id}`,
     (error) => {
-      if (error?.errno === 1062) {
-        res.sendStatus(400);
-      }
-      else {
+      if (error)
+        res.sendStatus(500);
+      else
         res.sendStatus(200);
-      }
     }
   );
 });
 
-userRouter.put("/upload/:id", (req, res) => {
+userRouter.put("/upload/:id", (req: Request, res: Response) => {
   if (req.files) {
     const id = parseInt(req.params.id);
 
     const file = req.files.file as fileUpload.UploadedFile;
     const ext = file.name.slice(file.name.lastIndexOf("."));
     const uuid = uuidv4();
-    const fileName = `./images/${uuid}${ext}`;
+    const fileName = `./uploads/${uuid}${ext}`;
 
     console.log(req.method, req.originalUrl, fileName);
 

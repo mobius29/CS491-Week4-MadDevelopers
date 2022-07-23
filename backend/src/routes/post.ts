@@ -10,8 +10,36 @@ interface TagItem {
 
 postsRouter.get('/', (req, res) => {
   console.log(req.method, req.originalUrl)
-  connection.query(
-    `SELECT Posts.id as postId, Users.id as authorId, title, displayName, Posts.createdAt FROM Users INNER JOIN Posts ON Users.id = Posts.authorId`,
+  connection.query(`
+SELECT Posts.id as postId, 
+       Users.id as authorId,
+       title, 
+       displayName, 
+       Posts.createdAt 
+FROM   Users 
+       INNER JOIN Posts 
+                  ON Users.id = Posts.authorId`,
+    (error, rows) => {
+      if (error) res.status(500).send(error)
+      else res.send({ posts: rows })
+    }
+  )
+})
+
+postsRouter.get("/page/:page", (req, res) => {
+  const itemsPerPage = 10;
+  console.log(req.method, req.originalUrl)
+  connection.query(`
+SELECT Posts.id as postId, 
+       Users.id as authorId,
+       title, 
+       displayName, 
+       Posts.createdAt 
+FROM   Users 
+       INNER JOIN Posts 
+                  ON Users.id = Posts.authorId
+ORDER BY Posts.createdAt DESC
+LIMIT ${(parseInt(req.params.page) - 1) * itemsPerPage}, ${itemsPerPage}`,
     (error, rows) => {
       if (error) res.status(500).send(error)
       else res.send({ posts: rows })
