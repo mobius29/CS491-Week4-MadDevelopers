@@ -30,7 +30,7 @@ export const initializeForm = createAction(INITIALIZE_FORM)<
 
 export const check = createAction(CHECK)<void>()
 export const checkSuccess = createAction(CHECK_SUCCESS)<number>()
-export const checkFailure = createAction(CHECK_FAILURE)<void>()
+export const checkFailure = createAction(CHECK_FAILURE)<any>()
 
 export const register = createAction(REGISTER)<{
   userName: string

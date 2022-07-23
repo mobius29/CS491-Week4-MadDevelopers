@@ -1,20 +1,24 @@
+export type tag = {
+  tagId: number
+  tag: string
+}
+
+export type comment = {
+  userId: number
+  displayName: string
+  commentId: number
+  parentCommentId: number | null
+  comment: string
+}
+
 export type post = {
   postId: number
   title: string
   content: string
   authorId: number
   displayName: string
-  tags: {
-    id: number
-    tag: string
-  }[]
+  tags: tag[]
+  comments: comment[]
   createdAt: Date
-}
-
-export type comment = {
-  postId: number
-  comment: string
-  parentCommentId: number | null
-  userId: number
-  displayName: string
+  lastUpdated: Date
 }

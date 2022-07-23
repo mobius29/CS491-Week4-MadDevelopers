@@ -7,6 +7,7 @@ import { RootState } from '../../Modules'
 import {
   addTagField,
   changeField,
+  getPost,
   initializeForm,
   removeTagField,
   update,
@@ -16,13 +17,17 @@ const UpdateForm = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { id } = useParams()
+  const postId = parseInt(id!)
   const [error, setError] = useState<string>('')
 
-  const { form, postId, postError } = useSelector(({ post }: RootState) => ({
-    form: post.write,
-    postId: post.postId,
-    postError: post.postError,
-  }))
+  const { post, form, postError, postSuccess } = useSelector(
+    ({ post }: RootState) => ({
+      post: post.post,
+      form: post.write,
+      postError: post.postError,
+      postSuccess: post.postSuccess,
+    })
+  )
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -90,7 +95,7 @@ const UpdateForm = () => {
 
   const removeTags = (id: number) => {
     const { tags } = form
-    const idx = tags.findIndex((tag) => tag.id === id)
+    const idx = tags.findIndex((tag) => tag.tagId === id)
     dispatch(removeTagField(idx))
   }
 
@@ -99,16 +104,29 @@ const UpdateForm = () => {
   }, [dispatch])
 
   useEffect(() => {
+    dispatch(getPost(postId))
+  }, [dispatch, postId])
+
+  useEffect(() => {
+    if (post !== null) {
+      // console.log(post)
+      form.title = post.title
+      form.content = post.content
+      form.tags = post.tags
+    }
+  }, [post, form])
+
+  useEffect(() => {
     if (postError) {
       setError('Internal Server Error')
 
       return
     }
 
-    if (postId !== -1) {
-      navigate('/posts/:id')
+    if (postSuccess) {
+      navigate(`/posts/${postId}`)
     }
-  }, [postError, postId, navigate])
+  }, [postError, postSuccess, postId, navigate])
 
   return (
     <WritePost

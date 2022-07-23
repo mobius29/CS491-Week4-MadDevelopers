@@ -1,5 +1,7 @@
+import WikiHomeContainer from '../Containers/Wiki/WikiHomeContainer'
+
 const WikiPage = () => {
-  return <div>WikiPage</div>
+  return <WikiHomeContainer />
 }
 
 export default WikiPage

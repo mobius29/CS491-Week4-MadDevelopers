@@ -61,12 +61,13 @@ export const write = createAction(WRITE)<{
   title: string
   content: string
   tags: {
-    id: number
+    tagId: number
     tag: string
   }[]
 }>()
-
-export const writeSuccess = createAction(WRITE_SUCCESS)<number>()
+export const writeSuccess = createAction(WRITE_SUCCESS)<{
+  id: number
+}>()
 export const writeFailure = createAction(WRITE_FAILURE)<any>()
 
 export const update = createAction(UPDATE)<{
@@ -74,11 +75,13 @@ export const update = createAction(UPDATE)<{
   title: string
   content: string
   tags: {
-    id: number
+    tagId: number
     tag: string
   }[]
 }>()
-export const updateSuccess = createAction(UPDATE_SUCCESS)<number>()
+export const updateSuccess = createAction(UPDATE_SUCCESS)<{
+  id: number
+}>()
 export const updateFailure = createAction(UPDATE_FAILURE)<any>()
 
 export const deletePost = createAction(DELETE_POST)<number>()
@@ -89,7 +92,9 @@ export const addTagField = createAction(ADD_TAG_FIELD)<number>()
 export const removeTagField = createAction(REMOVE_TAG_FIELD)<number>()
 
 export const addComment = createAction(ADD_COMMENT)<{
-  comment: comment
+  postId: number
+  comment: string
+  parentCommentId: number | null
 }>()
 export const addCommentSuccess = createAction(ADD_COMMENT_SUCCESS)<void>()
 export const addCommentFailure = createAction(ADD_COMMENT_FAILURE)<any>()

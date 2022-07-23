@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom'
 import WritePost from '../../Components/Post/WritePost'
 import { RootState } from '../../Modules'
 import {
+  initializeForm,
   addTagField,
   removeTagField,
   changeField,
@@ -69,7 +70,11 @@ const WriteForm = () => {
     }
 
     tags.forEach((tag) => {
-      if (tag.tag === '') return
+      if (tag.tag === '') {
+        setError('do not allow blank')
+
+        return
+      }
     })
 
     dispatch(write({ title, content, tags }))
@@ -81,9 +86,13 @@ const WriteForm = () => {
 
   const removeTags = (id: number) => {
     const { tags } = form
-    const idx = tags.findIndex((tag) => tag.id === id)
+    const idx = tags.findIndex((tag) => tag.tagId === id)
     dispatch(removeTagField(idx))
   }
+
+  useEffect(() => {
+    dispatch(initializeForm())
+  }, [dispatch])
 
   useEffect(() => {
     if (postError) {

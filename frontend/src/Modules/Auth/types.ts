@@ -8,12 +8,16 @@ export type State = {
     password: string
     passwordConfirm: string
   }
+  registerSuccess: boolean
+
   login: {
     userName: string
     password: string
   }
+
   id: number
-  registerSuccess: boolean
+  checkIdError?: any
+
   authError?: any
 }
 

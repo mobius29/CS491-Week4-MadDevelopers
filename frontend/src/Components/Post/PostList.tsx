@@ -57,12 +57,12 @@ interface IProps {
   error: string
 }
 
-const PostItem = ({ postId, title, content }: post) => {
+const PostItem = ({ post }: { post: post }) => {
   return (
     <PostBlock>
-      <Link to={`/post/${postId}`}>
-        <div className='post-title'>{title}</div>
-        <div className='post-content'>{content}</div>
+      <Link to={`/post/${post.postId}`}>
+        <div className='post-title'>{post.title}</div>
+        <div className='post-content'>{post.content}</div>
       </Link>
     </PostBlock>
   )
@@ -70,16 +70,7 @@ const PostItem = ({ postId, title, content }: post) => {
 
 const PostList = ({ posts, error }: IProps) => {
   const postList = posts?.map((post) => (
-    <PostItem
-      key={post.postId}
-      postId={post.postId}
-      title={post.title}
-      content={post.content}
-      authorId={post.authorId}
-      displayName={post.displayName}
-      tags={post.tags}
-      createdAt={post.createdAt}
-    />
+    <PostItem key={post.postId} post={post} />
   ))
 
   return (

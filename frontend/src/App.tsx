@@ -4,6 +4,7 @@ import HomePage from './Pages/HomePage'
 import LoginPage from './Pages/LoginPage'
 import PostInfoPage from './Pages/PostInfoPage'
 import PostListPage from './Pages/PostListPage'
+import PostUpdatePage from './Pages/PostUpdatePage'
 import RegisterPage from './Pages/RegisterPage'
 import UserInfoPage from './Pages/UserInfoPage'
 import UserUpdatePage from './Pages/UserUpdatePage'
@@ -21,6 +22,7 @@ const App = () => {
         <Route path='/posts/search' element={<PostListPage />} />
         <Route path='/post/write' element={<WritePostPage />} />
         <Route path='/post/:id' element={<PostInfoPage />} />
+        <Route path='/post/update/:id' element={<PostUpdatePage />} />
         <Route path='/user/:id' element={<UserInfoPage />} />
         <Route path='/user/update/:id' element={<UserUpdatePage />} />
         <Route path='/wiki' element={<WikiPage />} />

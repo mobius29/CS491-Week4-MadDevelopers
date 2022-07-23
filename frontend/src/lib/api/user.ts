@@ -15,10 +15,12 @@ export const update = ({
   displayName,
   selfInformation,
 }: User) => {
-  console.log(id, profileImage, displayName, selfInformation)
   return client.put(`/user/update/${id}`, {
     profileImage,
     displayName,
     selfInformation,
   })
 }
+
+export const clickStar = (userId: number) =>
+  client.post('/user/star', { userId })
