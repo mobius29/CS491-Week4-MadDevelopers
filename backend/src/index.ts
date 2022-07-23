@@ -13,6 +13,8 @@ app.use(express.json());
 app.use(express.raw());
 app.use(fileUpload());
 
+app.use("/images", express.static("uploads"));
+
 app.use("/user", userRouter);
 app.use("/posts", postsRouter);
 
