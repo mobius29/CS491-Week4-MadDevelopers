@@ -4,9 +4,26 @@ import { connection } from "../connection.js";
 import { v4 as uuidv4 } from "uuid";
 import fileUpload from "express-fileupload";
 import multer from "multer";
-
+import fs from "fs";
+import path from "path";
 
 const userRouter: Router = Router();
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination(req, file, done) {
+      console.log("fucking destination!!!!!!!!");
+      done(null, "uploads/");
+    },
+    filename(req, file, done) {
+      console.log("fucking filename!!!!!!!!");
+      const ext = path.extname(file.originalname);
+      const fileName: string = uuidv4() + ext;
+      console.log(fileName);
+      done(null, uuidv4() + ext);
+    }
+  })
+});
 
 userRouter.post("/register", (req: Request, res: Response) => {
   const userName: string = req.body["userName"];
@@ -144,7 +161,14 @@ userRouter.put("/update/:id", (req, res) => {
   );
 });
 
+userRouter.put("/upload/:id", upload.single("file"), (req, res) => {
+  console.log(req.method, req.originalUrl, req.file, req.body);
+  res.sendStatus(200);
+})
+
+/*
 userRouter.put("/upload/:id", (req: Request, res: Response) => {
+  console.log(req.method, req.originalUrl, req.body, req.files);
   if (req.files) {
     const id = parseInt(req.params.id);
 
@@ -173,5 +197,6 @@ userRouter.put("/upload/:id", (req: Request, res: Response) => {
     res.sendStatus(400);
   }
 });
+*/
 
 export default userRouter;
