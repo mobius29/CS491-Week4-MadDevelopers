@@ -17,7 +17,7 @@ const Contents = () => {
         <Recommends />
       </MainBlock>
       <div className='go-all-posts'>
-        <Link to='/posts'>전체 게시글 보기</Link>
+        <Link to='/posts/1'>전체 게시글 보기</Link>
       </div>
     </>
   )

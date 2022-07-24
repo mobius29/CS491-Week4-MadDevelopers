@@ -4,81 +4,72 @@ import { connection } from '../connection.js'
 const postsRouter: Router = Router()
 
 interface TagItem {
-  tagId: number;
-  tag: string;
+  tagId: number
+  tag: string
 }
 
-postsRouter.get('/', (req, res) => {
+postsRouter.get('/:page', (req, res) => {
   console.log(req.method, req.originalUrl)
-  connection.query(`
-SELECT
-    p.id as postId,
-    u.id as authorId,
-    p.title,
-    u.displayName,
-    unix_timestamp(p.createdAt) as createdAt,
-    p.lastUpdated,
-    (SELECT COUNT(*) FROM Comments c WHERE c.postid = p.id) as commentCount
-FROM
-    Users u
-INNER JOIN 
-    Posts p
-ON
-    u.id = p.authorId
-ORDER BY
-    p.createdAt
-DESC;`,
-    (error, rows) => {
-      if (error) res.status(500).send(error)
-      else res.send({ posts: rows })
+  const { page } = req.params
+  const start = 10 * (parseInt(page) - 1)
+  connection.query(
+    `
+    SELECT
+      p.id as postId,
+      u.id as authorId,
+      p.title,
+      u.displayName,
+      unix_timestamp(p.createdAt) as createdAt,
+      p.lastUpdated,
+      (SELECT COUNT(*) FROM Comments c WHERE c.postid = p.id) as commentCount
+    FROM Users u JOIN  Posts p ON u.id = p.authorId
+    ORDER BY p.createdAt DESC
+    LIMIT ${start}, 11;
+    `,
+    (error, posts) => {
+      if (error) {
+        console.error(error)
+        return res.status(500).send(error.message)
+      }
+
+      const hasNext = posts.length > 10
+      return res.send({ posts, hasNext })
     }
   )
 })
 
-postsRouter.get("/page/:page", (req, res) => {
-  const itemsPerPage = 10;
-  console.log(req.method, req.originalUrl)
-  connection.query(`
-SELECT Posts.id as postId, 
-       Users.id as authorId,
-       title, 
-       displayName, 
-       unix_timestamp(Posts.createdAt),
-FROM   Users 
-       INNER JOIN Posts 
-                  ON Users.id = Posts.authorId
-ORDER BY Posts.createdAt DESC
-LIMIT ${(parseInt(req.params.page) - 1) * itemsPerPage}, ${itemsPerPage}`,
-    (error, rows) => {
-      if (error) res.status(500).send(error)
-      else res.send({ posts: rows })
-    }
-  )
-})
-
-postsRouter.get('/:id', (req, res) => {
+postsRouter.get('/post/:id', (req, res) => {
   const postId = req.params.id
-  connection.query(`
-SELECT
-    title,
-    content,
-    authorId,
-    displayName,
-    unix_timestamp(Posts.createdAt) as createdAt,
-    unix_timestamp(lastUpdated) as lastUpdated
-FROM
-    Posts
-INNER JOIN
-    Users
-WHERE
-    Users.id = Posts.authorId AND Posts.id = ${postId};`,
-    (_, postData) => {
+  connection.query(
+    `
+    SELECT
+      title,
+      content,
+      authorId,
+      displayName,
+      unix_timestamp(p.createdAt) as createdAt,
+      unix_timestamp(lastUpdated) as lastUpdated
+    FROM Posts p JOIN Users u ON p.authorId = u.id
+    WHERE p.id = ${postId};`,
+    (postError, postData) => {
+      if (postError) {
+        console.error(postError)
+        return res.status(500).send('INTERNAL SERVER ERROR')
+      }
       connection.query(
         `SELECT Comments.id as commentId, userId, displayName, comment, unix_timestamp(Comments.createdAt) as createdAt, parentCommentId FROM Comments INNER JOIN Users WHERE userId = Users.id AND postId = ${postId}`,
-        (_, commentData) => {
+        (commentError, commentData) => {
+          if (commentError) {
+            console.error(commentError)
+            return res.status(500).send('INTERNAL SERVER ERROR')
+          }
           connection.query(
             `SELECT Tags.tagId, tag FROM Tags JOIN PostTags ON PostTags.tagId = Tags.id WHERE postId = ${postId};`,
-            (_, tagData) => {
+            (tagError, tagData) => {
+              if (tagError) {
+                console.error(tagError)
+                return res.status(500).send('INTERNAL SERVER ERROR')
+              }
               const json = postData[0]
               json['comments'] = commentData
               json['tags'] = tagData
@@ -93,9 +84,9 @@ WHERE
 
 postsRouter.post('/create', (req, res) => {
   const title: string = req.body['title']
-  const authorId: string = req.cookies["id"];
+  const authorId: string = req.cookies['id']
   const tags: TagItem[] = req.body['tags']
-  const content: string = req.body["content"];
+  const content: string = req.body['content']
 
   console.log(req.method, req.baseUrl, title, content, authorId, tags)
 
@@ -105,10 +96,15 @@ postsRouter.post('/create', (req, res) => {
       const postId = postData['insertId']
 
       tags.forEach((tag: TagItem) => {
-        connection.query(`INSERT INTO Tags VALUE(NULL, ${tag.tagId}, "${tag.tag}")`, (_, tagData) => {
-          const tagId = tagData["insertId"];
-          connection.query(`INSERT INTO PostTags VALUE(${postId}, "${tagId}")`)
-        })
+        connection.query(
+          `INSERT INTO Tags VALUE(NULL, ${tag.tagId}, "${tag.tag}")`,
+          (_, tagData) => {
+            const tagId = tagData['insertId']
+            connection.query(
+              `INSERT INTO PostTags VALUE(${postId}, "${tagId}")`
+            )
+          }
+        )
       })
 
       res.status(200).send({ id: postId })
@@ -132,30 +128,108 @@ postsRouter.post('/comment', (req, res) => {
   )
 })
 
-postsRouter.put("/update/:id", (req, res) => {
-  const title = req.body["title"];
-  const content = req.body["content"];
-  const tags = req.body["tags"];
-  const postId = parseInt(req.params.id);
+postsRouter.put('/update/:id', (req, res) => {
+  const title = req.body['title']
+  const content = req.body['content']
+  const tags = req.body['tags']
+  const postId = parseInt(req.params.id)
 
-  connection.query(`UPDATE Posts SET title = "${title}", content = "${content}" WHERE id = ${postId}`);
+  connection.query(
+    `UPDATE Posts SET title = "${title}", content = "${content}" WHERE id = ${postId}`
+  )
 
-  connection.query(`DELETE FROM Tags WHERE id IN (SELECT tagId FROM PostTags WHERE postId=${postId})`);
+  connection.query(
+    `DELETE FROM Tags WHERE id IN (SELECT tagId FROM PostTags WHERE postId=${postId})`
+  )
 
   tags.forEach((tag: TagItem) => {
-    connection.query(`INSERT INTO Tags VALUE(NULL, ${tag.tagId}, "${tag.tag}")`, (_, tagData) => {
-      const tagId = tagData["insertId"];
-      connection.query(`INSERT INTO PostTags VALUE(${postId}, "${tagId}")`);
-    });
-  });
+    connection.query(
+      `INSERT INTO Tags VALUE(NULL, ${tag.tagId}, "${tag.tag}")`,
+      (_, tagData) => {
+        const tagId = tagData['insertId']
+        connection.query(`INSERT INTO PostTags VALUE(${postId}, "${tagId}")`)
+      }
+    )
+  })
 
-  res.status(200).send({ id: postId });
-});
+  res.status(200).send({ id: postId })
+})
 
-postsRouter.delete("/delete/:id", (req, res) => {
-  console.log(req.method, req.originalUrl);
-  connection.query(`DELETE FROM Posts WHERE id = ${req.params.id}`);
-  res.sendStatus(200);
-});
+postsRouter.delete('/delete/:id', (req, res) => {
+  console.log(req.method, req.originalUrl)
+  connection.query(`DELETE FROM Posts WHERE id = ${req.params.id}`)
+  res.sendStatus(200)
+})
+
+postsRouter.get('/results/:page', (req, res) => {
+  const search = req.query.search
+  const tag = req.query.tag
+  const { page } = req.params
+
+  const intPage = parseInt(page)
+
+  if (search !== undefined && typeof search === 'string') {
+    const query = `
+    SELECT
+        p.id as postId,
+        u.id as authorId,
+        p.title,
+        u.displayName,
+        unix_timestamp(p.createdAt) as createdAt,
+        p.lastUpdated,
+        (SELECT COUNT(*) FROM Comments c WHERE c.postid = p.id) as commentCount
+    FROM
+        Users u
+    INNER JOIN 
+        Posts p
+    ON
+        u.id = p.authorId
+    WHERE
+        p.title LIKE "%${search}" OR
+        p.content LIKE "%${search}" OR
+        u.displayName LIKE "%${search}"
+    ORDER BY p.createdAt DESC
+    LIMIT ${intPage - 1} * 10, 11
+    ;`
+    connection.query(query, (error, posts) => {
+      if (error) {
+        return res.status(500).send('INTERNAL SERVER ERROR')
+      }
+
+      const hasNext = posts.length > 10
+      return res.status(200).send({ posts, hasNext })
+    })
+  } else if (tag !== undefined && typeof tag === 'string') {
+    const query = `
+    SELECT
+      p.id as postId,
+      u.id as authorId,
+      p.title,
+      u.displayName,
+      unix_timestamp(p.createdAt) as createdAt,
+      p.lastupdated,
+      (SELECT COUNT(*)
+      FROM Comments c
+      WHERE c.postId = p.id) as commentCount
+    FROM Posts p JOIN User u ON u.id = p.authorId
+    WHERE p.id IN (
+      SELECT postId
+      FROM PostTags pt JOIN Tags t ON pt.tagId = t.id
+      WHERE t.tag = ${tag})
+    ORDER BY p.createdAt DESC
+    LIMIT ${intPage - 1} * 10, 11
+    ;`
+    connection.query(query, (error, posts) => {
+      if (error) {
+        console.error(error)
+
+        return res.status(500).send(error.message)
+      }
+
+      const hasNext = posts.length > 10
+      return res.status(200).send({ posts, hasNext })
+    })
+  }
+})
 
 export default postsRouter

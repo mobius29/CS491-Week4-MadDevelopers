@@ -51,7 +51,7 @@ const PostInfoContainer = () => {
   const onDelete = (id: number) => {
     console.log(id)
     dispatch(deletePost(id))
-    navigate('/posts')
+    navigate('/posts/1')
   }
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {

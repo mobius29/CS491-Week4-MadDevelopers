@@ -17,8 +17,14 @@ const UserInfoContainer = () => {
     id: auth.id,
   }))
   const [isFollowing, setIsFollowing] = useState<boolean>(false)
+  const [followerCount, setFollowerCount] = useState<number>(0)
 
   const onClickStar = (followingId: number) => {
+    if (isFollowing) {
+      setFollowerCount(followerCount - 1)
+    } else {
+      setFollowerCount(followerCount + 1)
+    }
     setIsFollowing(!isFollowing)
     dispatch(follow(followingId))
   }
@@ -38,6 +44,7 @@ const UserInfoContainer = () => {
 
   useEffect(() => {
     setIsFollowing(user?.isFollowing! === 1)
+    setFollowerCount(user?.starCount!)
   }, [user])
 
   return (
@@ -48,6 +55,7 @@ const UserInfoContainer = () => {
         id={id}
         user={user}
         isFollowing={isFollowing}
+        followerCount={followerCount}
         onClickStar={onClickStar}
         onDeleteUser={onDeleteUser}
       />

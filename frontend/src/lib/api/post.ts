@@ -15,7 +15,7 @@ interface Comment {
 
 export const getPosts = (page: number) => client.get(`/posts/${page}`)
 
-export const getPost = (id: number) => client.get(`/posts/${id}`)
+export const getPost = (id: number) => client.get(`/posts/post/${id}`)
 
 export const getPostsBySearch = ({
   search,

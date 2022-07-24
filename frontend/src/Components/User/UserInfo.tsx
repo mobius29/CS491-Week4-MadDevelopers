@@ -45,6 +45,21 @@ const UserInfoBlock = styled.div`
       font-size: 1.125rem;
       background: yellow;
     }
+
+    .following {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 24px;
+    }
+
+    .isFollowing {
+      background: red;
+    }
+
+    .unFollowing {
+      background: aqua;
+    }
   }
 
   .post-list {
@@ -71,6 +86,7 @@ interface IProps {
     starCount: number
   } | null
   isFollowing: boolean
+  followerCount: number
   onClickStar: (followingId: number) => void
   onDeleteUser: (id: number) => void
 }
@@ -80,6 +96,7 @@ const UserInfo = ({
   id,
   user,
   isFollowing,
+  followerCount,
   onClickStar,
   onDeleteUser,
 }: IProps) => {
@@ -96,7 +113,7 @@ const UserInfo = ({
                   alt='profile_image'
                   width='200px'
                   height='200px'
-                  src={`http://192.249.18.176/images/${user.profileImage}`}
+                  src={`http://192.2249.18.176/images/${user.profileImage}`}
                 />
               </div>
               <div className='profile-top'>
@@ -105,10 +122,14 @@ const UserInfo = ({
                   <div className='following'>{user.starCount}</div>
                 ) : (
                   <div
-                    className='following'
+                    className={
+                      isFollowing
+                        ? 'following isFollowing'
+                        : 'following unFollowing'
+                    }
                     onClick={() => onClickStar(userId)}
                   >
-                    {user.starCount}
+                    {followerCount}
                   </div>
                 )}
               </div>
