@@ -13,13 +13,14 @@ const PostListContainer = () => {
   const [queryParams] = useSearchParams()
   const search = queryParams.get('search')
   const tag = queryParams.get('tag')
-  const { page } = useParams()
+  const page = parseInt(useParams().page!)
 
-  const { posts, getPostsError, id } = useSelector(
+  const { posts, getPostsError, id, hasNext } = useSelector(
     ({ post, auth }: RootState) => ({
       posts: post.posts,
       getPostsError: post.getPostsError,
       id: auth.id,
+      hasNext: post.hasNext,
     })
   )
   const [error, setError] = useState<string>('')
@@ -30,13 +31,12 @@ const PostListContainer = () => {
 
   useEffect(() => {
     if (page !== undefined) {
-      const intPage = parseInt(page)
       if (search !== null) {
-        dispatch(getPostsBySearch({ search, page: intPage }))
+        dispatch(getPostsBySearch({ search, page }))
       } else if (tag !== null) {
-        dispatch(getPostsByTag({ tag, page: intPage }))
+        dispatch(getPostsByTag({ tag, page }))
       } else {
-        dispatch(getPosts(parseInt(page)))
+        dispatch(getPosts(page))
       }
     }
   }, [dispatch, page, search, tag])
@@ -51,7 +51,7 @@ const PostListContainer = () => {
   return (
     <>
       <Header id={id} />
-      <PostList posts={posts} error={error} />
+      <PostList page={page} hasNext={hasNext} posts={posts} error={error} />
       <Footer />
     </>
   )

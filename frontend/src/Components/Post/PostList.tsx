@@ -62,6 +62,8 @@ const BottomBlock = styled.div`
 
 interface IProps {
   posts: post[] | null
+  page: number
+  hasNext: boolean
   error: string
 }
 
@@ -71,16 +73,18 @@ const PostItem = ({ post }: { post: post }) => {
       <Link to={`/post/${post.postId}`}>
         <div className='post-title'>{post.title}</div>
       </Link>
-      <div className="post-author">
+      <div className='post-author'>
         <Link to={`/user/${post.authorId}`}>{post.displayName}</Link>
       </div>
-      <div className="post-comments">&#x1F5E8; {post.commentCount}</div>
-      <div className="post-created">{(new Date(post.createdAt * 1000)).toLocaleDateString()}</div>
+      <div className='post-comments'>&#x1F5E8; {post.commentCount}</div>
+      <div className='post-created'>
+        {new Date(post.createdAt * 1000).toLocaleDateString()}
+      </div>
     </PostBlock>
   )
 }
 
-const PostList = ({ posts, error }: IProps) => {
+const PostList = ({ posts, hasNext, page, error }: IProps) => {
   const postList = posts?.map((post) => (
     <PostItem key={post.postId} post={post} />
   ))
@@ -93,7 +97,19 @@ const PostList = ({ posts, error }: IProps) => {
         <>
           {postList}
           <BottomBlock>
-            <div className='pagination'>1 ... 4 5 6 ... 10</div>
+            <div className='pagination'>
+              {page !== 1 && (
+                <Link to={`/posts/${page - 1}`} className='page toPrev'>
+                  &#9664;
+                </Link>
+              )}
+              <span className='page currentPage'>{page}</span>
+              {hasNext && (
+                <Link to={`/posts/${page + 1}`} className='page toNext'>
+                  &#9654;
+                </Link>
+              )}
+            </div>
             <Link className='write-btn' to='/post/write'>
               Write
             </Link>
