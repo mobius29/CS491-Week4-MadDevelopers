@@ -113,7 +113,7 @@ const UserInfo = ({
                   alt='profile_image'
                   width='200px'
                   height='200px'
-                  src={`http://192.2249.18.176/images/${user.profileImage}`}
+                  src={`http://192.249.18.176/images/${user.profileImage}`}
                 />
               </div>
               <div className='profile-top'>
