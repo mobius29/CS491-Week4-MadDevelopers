@@ -81,7 +81,7 @@ userRouter.post('/star', (req, res) => {
   const followingId = req.body['followingId']
 
   console.log(req.method, req.originalUrl, followerId, followingId)
-  const selectQuery = `SELECT * FROM Stars WHERE followerId="${followerId}" AND followingId="${followingId}"`
+  const selectQuery = `SELECT * FROM Stars WHERE followerId=${followerId} AND followingId=${followingId}`
   connection.query(selectQuery, (error, result) => {
     if (error) {
       console.error(error)
@@ -90,13 +90,13 @@ userRouter.post('/star', (req, res) => {
 
     // follower cancel follow
     if (result) {
-      const deleteQuery = `DELETE FROM Stars WHERE follwerId="${followerId} AND followingId="${followingId}`
+      const deleteQuery = `DELETE FROM Stars WHERE follwerId=${followerId} AND followingId=${followingId}`
       connection.query(deleteQuery)
       return res.status(200).send('unfollow')
     }
     // follower start to follow
     else {
-      const insertQuery = `INSERT INTO Stars(followerId, followingId) VALUE ("${followerId}", "${followingId}")`
+      const insertQuery = `INSERT INTO Stars(followerId, followingId) VALUE (${followerId}, ${followingId})`
       connection.query(insertQuery)
       return res.status(200).send('follow')
     }

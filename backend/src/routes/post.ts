@@ -32,7 +32,12 @@ postsRouter.get('/:page', (req, res) => {
         return res.status(500).send(error.message)
       }
 
-      const hasNext = posts.length > 10
+      let hasNext = false;
+      if (posts.length === 11) {
+        hasNext = true;
+        posts.splice(-1);
+      }
+
       return res.send({ posts, hasNext })
     }
   )
@@ -161,12 +166,14 @@ postsRouter.delete('/delete/:id', (req, res) => {
   res.sendStatus(200)
 })
 
-postsRouter.get('/results/:page', (req, res) => {
-  const search = req.query.search
-  const tag = req.query.tag
-  const { page } = req.params
+postsRouter.get('/search/results', (req, res) => {
+  console.log("HERE!", req.method, req.originalUrl);
+  const search = req.query.search;
+  const tag = req.query.tag;
+  const page: string = req.query.pages as string;
 
-  const intPage = parseInt(page)
+  const intPage = parseInt(page);
+  console.log({ page, search, tag, intPage });
 
   if (search !== undefined && typeof search === 'string') {
     const query = `
@@ -185,15 +192,15 @@ postsRouter.get('/results/:page', (req, res) => {
     ON
         u.id = p.authorId
     WHERE
-        p.title LIKE "%${search}" OR
-        p.content LIKE "%${search}" OR
-        u.displayName LIKE "%${search}"
+        p.title LIKE "%${search}%" OR
+        p.content LIKE "%${search}%" OR
+        u.displayName LIKE "%${search}%"
     ORDER BY p.createdAt DESC
-    LIMIT ${intPage - 1} * 10, 11
+    LIMIT ${(intPage - 1) * 10}, 11
     ;`
     connection.query(query, (error, posts) => {
       if (error) {
-        return res.status(500).send('INTERNAL SERVER ERROR')
+        return res.status(500).send(error);
       }
 
       const hasNext = posts.length > 10
@@ -217,7 +224,7 @@ postsRouter.get('/results/:page', (req, res) => {
       FROM PostTags pt JOIN Tags t ON pt.tagId = t.id
       WHERE t.tag = ${tag})
     ORDER BY p.createdAt DESC
-    LIMIT ${intPage - 1} * 10, 11
+    LIMIT ${(intPage - 1) * 10}, 11
     ;`
     connection.query(query, (error, posts) => {
       if (error) {
