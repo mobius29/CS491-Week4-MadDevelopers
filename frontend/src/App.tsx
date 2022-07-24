@@ -19,8 +19,11 @@ const App = () => {
         <Route path='/' element={<HomePage />} />
         <Route path='/register' element={<RegisterPage />} />
         <Route path='/login' element={<LoginPage />} />
-        <Route path='/posts/:page' element={<PostListPage />} />
-        <Route path='/posts/results/:page' element={<PostListPage />} />
+        <Route path='/posts/:page' element={<PostListPage allPosts={true} />} />
+        <Route
+          path='/posts/results'
+          element={<PostListPage allPosts={false} />}
+        />
         <Route path='/post/write' element={<WritePostPage />} />
         <Route path='/post/:id' element={<PostInfoPage />} />
         <Route path='/post/update/:id' element={<PostUpdatePage />} />

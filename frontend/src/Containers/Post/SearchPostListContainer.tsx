@@ -1,16 +1,19 @@
-import PostList from '../../Components/Post/PostList'
+import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useState, useEffect } from 'react'
-import { RootState } from '../../Modules'
-import { getPosts } from '../../Modules/Post'
-import { check } from '../../Modules/Auth'
-import Header from '../../Components/Common/Header'
+import { useSearchParams } from 'react-router-dom'
 import Footer from '../../Components/Common/Footer'
-import { useParams } from 'react-router-dom'
+import Header from '../../Components/Common/Header'
+import PostList from '../../Components/Post/PostList'
+import { RootState } from '../../Modules'
+import { check } from '../../Modules/Auth'
+import { getPostsBySearch, getPostsByTag } from '../../Modules/Post'
 
-const PostListContainer = () => {
+const SearchPostListContainer = () => {
   const dispatch = useDispatch()
-  const page = parseInt(useParams().page!!)
+  const [queryParams] = useSearchParams()
+  const search = queryParams.get('search')
+  const tag = queryParams.get('tag')
+  const page = parseInt(queryParams.get('page')!!)
 
   const { posts, getPostsError, id, hasNext } = useSelector(
     ({ post, auth }: RootState) => ({
@@ -28,10 +31,14 @@ const PostListContainer = () => {
 
   useEffect(() => {
     if (page !== undefined) {
-      console.log(page)
-      dispatch(getPosts(page))
+      console.log(page, search, tag)
+      if (search !== null) {
+        dispatch(getPostsBySearch({ search, page }))
+      } else if (tag !== null) {
+        dispatch(getPostsByTag({ tag, page }))
+      }
     }
-  }, [dispatch, page])
+  }, [dispatch, page, search, tag])
 
   useEffect(() => {
     if (getPostsError) {
@@ -49,4 +56,4 @@ const PostListContainer = () => {
   )
 }
 
-export default PostListContainer
+export default SearchPostListContainer
