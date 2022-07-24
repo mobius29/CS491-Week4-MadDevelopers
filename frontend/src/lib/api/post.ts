@@ -23,10 +23,10 @@ export const getPostsBySearch = ({
 }: {
   search: string
   page: number
-}) => client.get(`/posts/results?search=${search}/${page}`)
+}) => client.get(`/posts/search/results?search=${search}&pages=${page}`)
 
 export const getPostsByTag = ({ tag, page }: { tag: string; page: number }) =>
-  client.get(`/posts/results?tag=${tag}/${page}`)
+  client.get(`/posts/search/results?tag=${tag}&pages=${page}`)
 
 export const writePost = ({ title, content, tags }: Post) =>
   client.post('/posts/create', { title, content, tags })

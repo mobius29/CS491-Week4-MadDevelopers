@@ -68,7 +68,7 @@ const Header = ({ id }: IProps) => {
       return
     }
 
-    navigate(`/posts/results?search=${searchValue}/1`)
+    navigate(`/posts/search/results?search=${searchValue}&page=1`)
   }
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -78,7 +78,7 @@ const Header = ({ id }: IProps) => {
   }
   const onClick = () => {
     dispatch(logout())
-    navigate('/')
+    navigate(`/posts/results?search=${searchValue}&page=1`)
   }
 
   return (

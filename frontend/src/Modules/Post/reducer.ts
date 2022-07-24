@@ -61,9 +61,10 @@ const reducer = createReducer<State, Action>(initialState, {
     commentpostSuccess: false,
     hasNext: false,
   }),
-  [actions.GET_POSTS_SUCCESS]: (state, { payload: { posts } }) => ({
+  [actions.GET_POSTS_SUCCESS]: (state, { payload: { posts, hasNext } }) => ({
     ...state,
     posts,
+    hasNext,
     getPostsError: null,
   }),
   [actions.GET_POSTS_FAILURE]: (state, { payload: error }) => ({

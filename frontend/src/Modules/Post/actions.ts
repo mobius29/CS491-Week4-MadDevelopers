@@ -65,6 +65,7 @@ export const initializeForm = createAction(INITIALIZE_FORM)<{
 export const getPosts = createAction(GET_POSTS)<number>()
 export const getPostsSuccess = createAction(GET_POSTS_SUCCESS)<{
   posts: post[]
+  hasNext: boolean
 }>()
 export const getPostsFailure = createAction(GET_POSTS_FAILURE)<any>()
 
