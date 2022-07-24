@@ -67,13 +67,22 @@ interface IProps {
     displayName: string
     selfInformation: string
     profileImage: string
-    star: boolean
+    isFollowing: number
     starCount: number
   } | null
+  isFollowing: boolean
+  onClickStar: (followingId: number) => void
   onDeleteUser: (id: number) => void
 }
 
-const UserInfo = ({ userId, id, user, onDeleteUser }: IProps) => {
+const UserInfo = ({
+  userId,
+  id,
+  user,
+  isFollowing,
+  onClickStar,
+  onDeleteUser,
+}: IProps) => {
   return (
     <>
       {user === null ? (
@@ -92,7 +101,16 @@ const UserInfo = ({ userId, id, user, onDeleteUser }: IProps) => {
               </div>
               <div className='profile-top'>
                 <div className='profile-name'>{user.displayName}</div>
-                <div className='star'>{user.starCount}</div>
+                {userId === id ? (
+                  <div className='following'>{user.starCount}</div>
+                ) : (
+                  <div
+                    className='following'
+                    onClick={() => onClickStar(userId)}
+                  >
+                    {user.starCount}
+                  </div>
+                )}
               </div>
 
               <div className='profile-introduce'>{user.selfInformation}</div>

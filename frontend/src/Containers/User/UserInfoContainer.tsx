@@ -1,9 +1,9 @@
 import UserInfo from '../../Components/User/UserInfo'
 import { useDispatch, useSelector } from 'react-redux'
 import { RootState } from '../../Modules'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { check, deleteUser } from '../../Modules/Auth'
-import { getUser } from '../../Modules/User'
+import { getUser, follow } from '../../Modules/User'
 import { useNavigate, useParams } from 'react-router-dom'
 import Header from '../../Components/Common/Header'
 import Footer from '../../Components/Common/Footer'
@@ -16,7 +16,12 @@ const UserInfoContainer = () => {
     user: user.user,
     id: auth.id,
   }))
+  const [isFollowing, setIsFollowing] = useState<boolean>(false)
 
+  const onClickStar = (followingId: number) => {
+    setIsFollowing(!isFollowing)
+    dispatch(follow(followingId))
+  }
   const onDeleteUser = (id: number) => {
     dispatch(deleteUser(id))
     navigate('/')
@@ -31,6 +36,10 @@ const UserInfoContainer = () => {
     dispatch(check())
   }, [dispatch])
 
+  useEffect(() => {
+    setIsFollowing(user?.isFollowing! === 1)
+  }, [user])
+
   return (
     <>
       <Header id={id} />
@@ -38,6 +47,8 @@ const UserInfoContainer = () => {
         userId={userId === undefined ? -1 : parseInt(userId)}
         id={id}
         user={user}
+        isFollowing={isFollowing}
+        onClickStar={onClickStar}
         onDeleteUser={onDeleteUser}
       />
       <Footer />

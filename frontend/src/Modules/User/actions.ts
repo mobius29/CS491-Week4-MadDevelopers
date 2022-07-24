@@ -15,6 +15,10 @@ export const UPLOAD = 'user/UPLOAD' as const
 export const UPLOAD_SUCCESS = 'user/UPLOAD_SUCCESS' as const
 export const UPLOAD_FAILURE = 'user/UPLOAD_FAILURE' as const
 
+export const FOLLOW = 'user/FOLLOW' as const
+export const FOLLOW_SUCCESS = 'user/FOLLOW_SUCCESS' as const
+export const FOLLOW_FAILURE = 'user/FOLLOW_FAILURE' as const
+
 export const initialize = createAction(INITIALIZE)<void>()
 
 export const changeField = createAction(CHANGE_FIELD)<{
@@ -28,7 +32,7 @@ export const getUserSuccess = createAction(GET_USER_SUCCESS)<{
     displayName: string
     selfInformation: string
     profileImage: string
-    star: boolean
+    isFollowing: number
     starCount: number
   }
 }>()
@@ -48,3 +52,7 @@ export const upload = createAction(UPLOAD)<{
 }>()
 export const uploadSuccess = createAction(UPLOAD_SUCCESS)<void>()
 export const uploadFailure = createAction(UPLOAD_FAILURE)<any>()
+
+export const follow = createAction(FOLLOW)<number>()
+export const followSuccess = createAction(FOLLOW_SUCCESS)<void>()
+export const followFailure = createAction(FOLLOW_FAILURE)<any>()

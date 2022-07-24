@@ -6,11 +6,6 @@ interface User {
   selfInformation: string
 }
 
-interface UploadFile {
-  id: number
-  file: FormData
-}
-
 export const getUser = (id: number) => client.get(`/user/${id}`)
 
 export const update = ({ id, displayName, selfInformation }: User) => {
@@ -20,10 +15,10 @@ export const update = ({ id, displayName, selfInformation }: User) => {
   })
 }
 
-export const clickStar = (userId: number) =>
-  client.post('/user/star', { userId })
+export const clickFollow = (followingId: number) =>
+  client.post('/user/star', { followingId })
 
-export const updateFile = ({ id, file }: UploadFile) => {
+export const updateFile = ({ id, file }: { id: number; file: FormData }) => {
   return client.put(`/user/upload/${id}`, file, {
     headers: { 'Content-Type': 'multipart/form-data' },
   })

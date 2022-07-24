@@ -3,19 +3,20 @@ import { Action, State } from './types'
 import * as actions from './actions'
 import produce from 'immer'
 
-const initialState = {
+const initialState: State = {
   id: -1,
   user: {
-    star: false,
-    starCount: 0,
     profileImage: '',
     displayName: '',
     selfInformation: '',
+    isFollowing: 0,
+    starCount: 0,
   },
   form: {
     displayName: '',
     selfInformation: '',
   },
+  getUserError: null,
   updateSuccess: false,
   updateError: null,
   uploadSuccess: false,
@@ -52,6 +53,12 @@ const reducer = createReducer<State, Action>(initialState, {
   [actions.GET_USER_SUCCESS]: (state, { payload: { user } }) => ({
     ...state,
     user: user,
+    getUserError: null,
+  }),
+  [actions.GET_USER_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    user: null,
+    getUserError: error,
   }),
   [actions.UPLOAD_SUCCESS]: (state) => ({
     ...state,

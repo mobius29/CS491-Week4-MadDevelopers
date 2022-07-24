@@ -25,6 +25,7 @@ export type State = {
   commentWrite: string
   commentPostError: any
   commentPostSuccess: boolean
+  hasNext: boolean
 }
 
 export type Action = ActionType<typeof actions>

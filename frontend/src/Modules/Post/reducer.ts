@@ -30,6 +30,7 @@ const initialState = {
   commentWrite: '',
   commentPostError: null,
   commentPostSuccess: false,
+  hasNext: false,
 }
 
 const reducer = createReducer<State, Action>(initialState, {
@@ -52,18 +53,49 @@ const reducer = createReducer<State, Action>(initialState, {
     ...state,
     write: value,
     update: value,
+    getPostsError: null,
     postId: -1,
     postError: null,
     postSuccess: false,
     commentWrite: '',
     commentpostSuccess: false,
+    hasNext: false,
   }),
   [actions.GET_POSTS_SUCCESS]: (state, { payload: { posts } }) => ({
     ...state,
     posts,
+    getPostsError: null,
   }),
   [actions.GET_POSTS_FAILURE]: (state, { payload: error }) => ({
     ...state,
+    getPostsError: error,
+  }),
+  [actions.GET_POSTS_BY_SEARCH_SUCCESS]: (
+    state,
+    { payload: { posts, hasNext } }
+  ) => ({
+    ...state,
+    posts,
+    hasNext,
+    getPostError: null,
+  }),
+  [actions.GET_POSTS_BY_SEARCH_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    posts: null,
+    getPostsError: error,
+  }),
+  [actions.GET_POSTS_BY_TAG_SUCCESS]: (
+    state,
+    { payload: { posts, hasNext } }
+  ) => ({
+    ...state,
+    posts,
+    hasNext,
+    getPostError: null,
+  }),
+  [actions.GET_POSTS_BY_TAG_FAILURE]: (state, { payload: error }) => ({
+    ...state,
+    posts: null,
     getPostsError: error,
   }),
   [actions.GET_POST_SUCCESS]: (state, { payload: { post } }) => {

@@ -4,12 +4,13 @@ import * as actions from './actions'
 export type State = {
   id: number
   user: {
-    star: boolean
-    starCount: number
     profileImage: string
     displayName: string
     selfInformation: string
+    isFollowing: number
+    starCount: number
   } | null
+  getUserError: any
   form: {
     displayName: string
     selfInformation: string

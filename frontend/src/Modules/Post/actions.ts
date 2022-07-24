@@ -8,6 +8,16 @@ export const GET_POSTS = 'post/GET_POSTS' as const
 export const GET_POSTS_SUCCESS = 'post/GET_POSTS_SUCCESS' as const
 export const GET_POSTS_FAILURE = 'post/GET_POSTS_FAILURE' as const
 
+export const GET_POSTS_BY_SEARCH = 'post/GET_POSTS_BY_SEARCH' as const
+export const GET_POSTS_BY_SEARCH_SUCCESS =
+  'post/GET_POSTS_BY_SEARCH_SUCCESS' as const
+export const GET_POSTS_BY_SEARCH_FAILURE =
+  'post/GET_POSTS_BY_SEARCH_FAILURE' as const
+
+export const GET_POSTS_BY_TAG = 'post/GET_POSTS_BY_TAG' as const
+export const GET_POSTS_BY_TAG_SUCCESS = 'post/GET_POSTS_BY_TAG_SUCCESS' as const
+export const GET_POSTS_BY_TAG_FAILURE = 'post/GET_POSTS_BY_TAG_FAILURE' as const
+
 export const GET_POST = 'post/GET_POST' as const
 export const GET_POST_SUCCESS = 'post/GET_POST_SUCCESS' as const
 export const GET_POST_FAILURE = 'post/GET_POST_FAILURE' as const
@@ -52,11 +62,34 @@ export const initializeForm = createAction(INITIALIZE_FORM)<{
   }
 }>()
 
-export const getPosts = createAction(GET_POSTS)<void>()
+export const getPosts = createAction(GET_POSTS)<number>()
 export const getPostsSuccess = createAction(GET_POSTS_SUCCESS)<{
   posts: post[]
 }>()
 export const getPostsFailure = createAction(GET_POSTS_FAILURE)<any>()
+
+export const getPostsBySearch = createAction(GET_POSTS_BY_SEARCH)<{
+  search: string
+  page: number
+}>()
+export const getPostsBySearchSuccess = createAction(
+  GET_POSTS_BY_SEARCH_SUCCESS
+)<{ posts: post[]; hasNext: boolean }>()
+export const getPostsBySearchFailure = createAction(
+  GET_POSTS_BY_SEARCH_FAILURE
+)<any>()
+
+export const getPostsByTag = createAction(GET_POSTS_BY_TAG)<{
+  tag: string
+  page: number
+}>()
+export const getPostsByTagSuccess = createAction(GET_POSTS_BY_TAG_SUCCESS)<{
+  posts: post[]
+  hasNext: boolean
+}>()
+export const getPostsByTagFailure = createAction(
+  GET_POSTS_BY_TAG_FAILURE
+)<any>()
 
 export const getPost = createAction(GET_POST)<number>()
 export const getPostSuccess = createAction(GET_POST_SUCCESS)<{

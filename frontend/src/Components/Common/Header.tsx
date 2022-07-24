@@ -104,7 +104,7 @@ const Header = ({ id }: IProps) => {
         </button>
       </div>
       <nav className='top-nav'>
-        <Link to={'/wiki'}>위키</Link>
+        <Link to={'/minigame'}>미니게임</Link>
         {id === -1 ? (
           <>
             <Link to='/login' className='loginBtn'>

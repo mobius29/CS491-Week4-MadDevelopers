@@ -13,9 +13,20 @@ interface Comment {
   parentCommentId: number
 }
 
-export const getPosts = () => client.get('/posts')
+export const getPosts = (page: number) => client.get(`/posts/${page}`)
 
 export const getPost = (id: number) => client.get(`/posts/${id}`)
+
+export const getPostsBySearch = ({
+  search,
+  page,
+}: {
+  search: string
+  page: number
+}) => client.get(`/posts/results?search=${search}/${page}`)
+
+export const getPostsByTag = ({ tag, page }: { tag: string; page: number }) =>
+  client.get(`/posts/results?tag=${tag}/${page}`)
 
 export const writePost = ({ title, content, tags }: Post) =>
   client.post('/posts/create', { title, content, tags })
