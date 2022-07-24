@@ -2,14 +2,13 @@ import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import HomePage from './Pages/HomePage'
 import LoginPage from './Pages/LoginPage'
-import MinigamePage from './Pages/MinigamePage'
+import TypingPage from './Pages/TypingPage'
 import PostInfoPage from './Pages/PostInfoPage'
 import PostListPage from './Pages/PostListPage'
 import PostUpdatePage from './Pages/PostUpdatePage'
 import RegisterPage from './Pages/RegisterPage'
 import UserInfoPage from './Pages/UserInfoPage'
 import UserUpdatePage from './Pages/UserUpdatePage'
-import WikiPage from './Pages/WikiPage'
 import WritePostPage from './Pages/WritePostPage'
 
 const App = () => {
@@ -29,8 +28,7 @@ const App = () => {
         <Route path='/post/update/:id' element={<PostUpdatePage />} />
         <Route path='/user/:id' element={<UserInfoPage />} />
         <Route path='/user/update/:id' element={<UserUpdatePage />} />
-        <Route path='/wiki' element={<WikiPage />} />
-        <Route path='/minigame' element={<MinigamePage />} />
+        <Route path='/minigame' element={<TypingPage />} />
       </Routes>
     </div>
   )
