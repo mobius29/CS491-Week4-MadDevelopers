@@ -41,7 +41,7 @@ userRouter.get('/check', (req, res) => {
   if (req.cookies['id']) {
     res.status(200).send(req.cookies['id'])
   } else {
-    res.status(404).send('-1')
+    res.status(401).send('-1')
   }
 })
 

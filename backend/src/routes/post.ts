@@ -167,7 +167,7 @@ postsRouter.delete('/delete/:id', (req, res) => {
 })
 
 postsRouter.get('/search/results', (req, res) => {
-  console.log("HERE!", req.method, req.originalUrl);
+  console.log( req.method, req.originalUrl);
   const search = req.query.search;
   const tag = req.query.tag;
   const page: string = req.query.pages as string;
