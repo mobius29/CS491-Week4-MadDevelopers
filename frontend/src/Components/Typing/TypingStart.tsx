@@ -1,4 +1,4 @@
-import { ReactElement } from 'react'
+import { forwardRef, ReactElement } from 'react'
 import styled from 'styled-components'
 
 const TypingStartBlock = styled.div`
@@ -14,26 +14,32 @@ const TypingStartBlock = styled.div`
     flex-direction: column;
     justify-content: center;
     width: 100%;
-    height: 500px;
     margin-left: 2rem;
     margin-right: 2rem;
 
     .typing-line {
+      font-family: Consolas, monaco, monospace;
       margin-top: 1rem;
-      height: 100px;
+      height: 150px;
 
       .show-line {
         margin-left: 3rem;
         margin-right: 2rem;
-        letter-spacing: 0.25rem;
-        font-size: 30px;
+        letter-spacing: 0.125rem;
+        font-size: 24px;
+
+        .wrong {
+          color: red;
+        }
       }
 
       .input-line {
+        font-family: Consolas, monaco, monospace;
         width: 90%;
         height: 40px;
-        font-size: 30px;
-        letter-spacing: 0.25rem;
+        font-size: 24px;
+        letter-spacing: 0.125rem;
+        overflow-wrap: break-word;
         margin-top: 1rem;
         margin-left: 2rem;
         padding-left: 1rem;
@@ -49,34 +55,55 @@ const TypingStartBlock = styled.div`
   }
 `
 
-const TypingLine = ({
-  line,
-  lineInput,
-  ref,
-  onKeyDown,
-  onChange,
-}: {
-  line: string
-  lineInput: string
-  ref: React.RefObject<HTMLInputElement> | null
-  onKeyDown: ((e: React.KeyboardEvent<HTMLInputElement>) => void) | undefined
-  onChange: ((e: React.ChangeEvent<HTMLInputElement>) => void) | undefined
-}) => {
-  return (
-    <div className='typing-line'>
-      <div className='show-line'>{line}</div>
-      <input
-        className='input-line'
-        ref={ref}
-        name='lineInput'
-        onKeyDown={onKeyDown}
-        placeholder='repeat above line'
-        value={lineInput}
-        onChange={onChange}
-      />
-    </div>
-  )
+const Letter = ({ letter, isWrong }: { letter: string; isWrong: boolean }) => {
+  return <span className={isWrong ? 'letter wrong' : 'letter'}>{letter}</span>
 }
+
+const TypingLine = forwardRef(
+  (
+    {
+      isFirstline,
+      line,
+      lineInput,
+      onKeyDown,
+      onChange,
+    }: {
+      isFirstline: boolean
+      line: string
+      lineInput: string
+      onKeyDown:
+        | ((e: React.KeyboardEvent<HTMLInputElement>) => void)
+        | undefined
+      onChange: ((e: React.ChangeEvent<HTMLInputElement>) => void) | undefined
+    },
+    ref: React.ForwardedRef<HTMLInputElement>
+  ) => {
+    let id = -1
+    const letterLine = line.split('').map((letter) => {
+      ++id
+      const isWrong =
+        lineInput.charAt(id) !== '' && lineInput.charAt(id) !== letter
+      return <Letter key={id} letter={letter} isWrong={isWrong} />
+    })
+
+    return (
+      <div className='typing-line'>
+        <div className='show-line'>{letterLine}</div>
+        {isFirstline && (
+          <input
+            className='input-line'
+            ref={ref}
+            name='lineInput'
+            onKeyDown={onKeyDown}
+            placeholder='repeat above line'
+            value={lineInput}
+            onChange={onChange}
+          />
+        )}
+      </div>
+    )
+  }
+)
 
 interface IProps {
   timer: number
@@ -109,6 +136,7 @@ const TypingStart = ({
     if (i === currentLine) {
       typingLine = typingLine.concat(
         <TypingLine
+          isFirstline={true}
           line={lines[i]}
           onKeyDown={onKeyDown}
           ref={currentLineRef}
@@ -119,6 +147,7 @@ const TypingStart = ({
     } else {
       typingLine = typingLine.concat(
         <TypingLine
+          isFirstline={false}
           line={lines[i]}
           ref={null}
           onKeyDown={undefined}
