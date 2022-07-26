@@ -21,5 +21,5 @@ app.use("/posts", postsRouter);
 app.use("/game", typegameRouter);
 
 app.listen(80, () => {
-    console.log("Server running...")
+  console.log("Server running...")
 });

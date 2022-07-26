@@ -81,16 +81,17 @@ userRouter.post('/star', (req, res) => {
   const followingId = req.body['followingId']
 
   console.log(req.method, req.originalUrl, followerId, followingId)
+  console.log(req.body);
   const selectQuery = `SELECT * FROM Stars WHERE followerId=${followerId} AND followingId=${followingId}`
-  connection.query(selectQuery, (error, result) => {
+  connection.query(selectQuery, (error, rows) => {
     if (error) {
       console.error(error)
       return res.status(500).send(error.message)
     }
 
     // follower cancel follow
-    if (result) {
-      const deleteQuery = `DELETE FROM Stars WHERE follwerId=${followerId} AND followingId=${followingId}`
+    if (rows.length === 1) {
+      const deleteQuery = `DELETE FROM Stars WHERE followerId=${followerId} AND followingId=${followingId}`
       connection.query(deleteQuery)
       return res.status(200).send('unfollow')
     }

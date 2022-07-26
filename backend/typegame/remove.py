@@ -32,25 +32,25 @@ def removeCommentsInCAndJava(f, file_name):
       f.write(line_trimmed+"\n")
   
 
-def switchExtension(extension):  
+def switchExtension(extension, original, output):  
   if extension == "c":
-    with open("main.c", "w") as f:
-      removeCommentsInCAndJava(f, "big_file.c")
+    with open(output, "w") as f:
+      removeCommentsInCAndJava(f, original)
 
   elif extension == "cc":
-    with open("main.cpp", "w") as f:
-      removeCommentsInCAndJava(f, "big_file.cc")
+    with open(output, "w") as f:
+      removeCommentsInCAndJava(f, original)
 
   elif extension == "java":
-    with open("main.java", "w") as f:
-      removeCommentsInCAndJava(f, "big_file.java")
+    with open(output, "w") as f:
+      removeCommentsInCAndJava(f, original)
 
   elif extension == "py":
-    with open("main.py", "w") as f:
-      removeCommentsInPy(f, "big_file.py")
+    with open(output, "w") as f:
+      removeCommentsInPy(f, original)
 
   else:
     print("extension error")
 
 args = sys.argv
-switchExtension(args[1])
+switchExtension(args[1], args[2], args[3]);
