@@ -35,6 +35,14 @@ export const getUserSuccess = createAction(GET_USER_SUCCESS)<{
     isFollowing: number
     starCount: number
   }
+  posts:
+    | {
+        postId: number
+        title: string
+        createdAt: number
+        commentCount: number
+      }[]
+    | null
 }>()
 export const getUserFailure = createAction(GET_USER_FAILURE)<any>()
 

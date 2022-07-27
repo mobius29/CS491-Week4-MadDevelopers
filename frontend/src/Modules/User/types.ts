@@ -11,6 +11,14 @@ export type State = {
     starCount: number
   } | null
   getUserError: any
+  posts:
+    | {
+        postId: number
+        title: string
+        createdAt: number
+        commentCount: number
+      }[]
+    | null
   form: {
     displayName: string
     selfInformation: string

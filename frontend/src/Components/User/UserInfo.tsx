@@ -75,6 +75,71 @@ const UserInfoBlock = styled.div`
   }
 `
 
+const PostBlock = styled.div`
+  display: grid;
+  width: 80%;
+  height: 120px;
+  margin: 0.5rem auto;
+  padding: 10px;
+  border: solid blueviolet 1px;
+  grid-template-rows: 1fr 1fr 1fr;
+  grid-template-columns: auto 100px;
+
+  .post-title {
+    grid-row: 1;
+    grid-column: 1;
+    font-size: 1.5rem;
+  }
+
+  .post-author {
+    grid-row: 2;
+    grid-column: 1;
+  }
+
+  .post-comments {
+    grid-row: 3;
+    grid-column: 1;
+  }
+
+  .post-created {
+    grid-row: 1;
+    grid-column: 2;
+    text-align: right;
+  }
+`
+
+interface PostProps {
+  postId: number
+  title: string
+  createdAt: number
+  commentCount: number
+}
+
+const PostItem = ({
+  post,
+  authorId,
+  displayName,
+}: {
+  post: PostProps
+  authorId: number
+  displayName: string
+}) => {
+  return (
+    <PostBlock>
+      <Link to={`/post/${post.postId}`}>
+        <div className='post-title'>{post.title}</div>
+      </Link>
+      <div className='post-author'>
+        <Link to={`/user/${authorId}`}>{displayName}</Link>
+      </div>
+      <div className='post-comments'>&#x1F5E8; {post.commentCount}</div>
+      <div className='post-created'>
+        {new Date(post.createdAt * 1000).toLocaleDateString()}
+      </div>
+    </PostBlock>
+  )
+}
+
 interface IProps {
   userId: number
   id: number
@@ -85,6 +150,7 @@ interface IProps {
     isFollowing: number
     starCount: number
   } | null
+  posts: PostProps[] | null
   isFollowing: boolean
   followerCount: number
   onClickStar: (followingId: number) => void
@@ -97,6 +163,7 @@ const UserInfo = ({
   user,
   isFollowing,
   followerCount,
+  posts,
   onClickStar,
   onDeleteUser,
 }: IProps) => {
@@ -137,7 +204,18 @@ const UserInfo = ({
               <div className='profile-introduce'>{user.selfInformation}</div>
             </div>
 
-            <div className='post-list'>게시글 목록</div>
+            <div className='post-list'>
+              <div className='post-list-contents'>
+                {posts?.map((post) => (
+                  <PostItem
+                    key={post.postId}
+                    post={post}
+                    authorId={userId}
+                    displayName={user.displayName}
+                  />
+                ))}
+              </div>
+            </div>
             <div className='btns'>
               {userId === id && (
                 <div>

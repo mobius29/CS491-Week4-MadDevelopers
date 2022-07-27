@@ -12,9 +12,10 @@ const UserInfoContainer = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { id: userId } = useParams()
-  const { user, id } = useSelector(({ auth, user }: RootState) => ({
+  const { user, id, posts } = useSelector(({ auth, user }: RootState) => ({
     user: user.user,
     id: auth.id,
+    posts: user.posts,
   }))
   const [isFollowing, setIsFollowing] = useState<boolean>(false)
   const [followerCount, setFollowerCount] = useState<number>(0)
@@ -54,6 +55,7 @@ const UserInfoContainer = () => {
         userId={userId === undefined ? -1 : parseInt(userId)}
         id={id}
         user={user}
+        posts={posts}
         isFollowing={isFollowing}
         followerCount={followerCount}
         onClickStar={onClickStar}

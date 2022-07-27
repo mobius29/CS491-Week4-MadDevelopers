@@ -16,6 +16,7 @@ const initialState: State = {
     displayName: '',
     selfInformation: '',
   },
+  posts: null,
   getUserError: null,
   updateSuccess: false,
   updateError: null,
@@ -50,9 +51,10 @@ const reducer = createReducer<State, Action>(initialState, {
     updateSuccess: false,
     updateError: error,
   }),
-  [actions.GET_USER_SUCCESS]: (state, { payload: { user } }) => ({
+  [actions.GET_USER_SUCCESS]: (state, { payload: { user, posts } }) => ({
     ...state,
-    user: user,
+    user,
+    posts,
     getUserError: null,
   }),
   [actions.GET_USER_FAILURE]: (state, { payload: error }) => ({
