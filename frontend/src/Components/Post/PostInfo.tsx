@@ -29,29 +29,46 @@ const PostInfoBlock = styled.div`
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 50px;
-        height: 30px;
+        width: 80px;
+        height: 50px;
         margin-right: 2rem;
-        background: white;
-        border: 1px solid black;
+        border-radius: 10px;
+        border: none;
+      }
+
+      .delete-btn {
+        background: pink;
+      }
+      .delete-btn:hover {
+        background: red;
+        color: white;
+        cursor: pointer;
+      }
+
+      .update-btn {
+        background: skyblue;
+        color: black;
+      }
+      .update-btn:hover {
+        background: blue;
+        color: white;
       }
     }
   }
 
   .info {
     display: flex;
-    justify-content: space-between;
+    justify-content: center;
     align-items: center;
+    flex-direction: column;
     font-size: 18px;
-    height: 2rem;
-    border-bottom: 1px solid black;
+    margin-top: 1rem;
 
-    .author {
-      margin-left: 5rem;
-    }
-
-    .createdAt {
-      margin-right: 5rem;
+    .profile-image img {
+      border-radius: 50%;
+      margin: 0.5rem 0;
+      width: 60px;
+      height: 60px;
     }
   }
 
@@ -89,7 +106,6 @@ const PostInfoBlock = styled.div`
     align-items: center;
     height: 40px;
     padding-left: 2rem;
-    border-bottom: 1px solid black;
   }
 
   .comment-top {
@@ -177,7 +193,7 @@ const Comment = ({
       <CommentBlock className={`${className} comment-block`}>
         <div className='border'>
           <div className='comment-top'>
-            <div className='comment-author'>author: {comment.displayName}</div>
+            <div className='comment-author'>{comment.displayName}</div>
             {isParent && (
               <div
                 className='changeParentComment'
@@ -267,11 +283,17 @@ const PostInfo = ({
           )}
 
           <div className='info'>
-            <Link to={`/user/${post.authorId}`} className='author'>
-              author: {post.displayName}
+            <div className="profile-image">
+              <img src={`http://192.249.18.176/images/${post.profileImage}`} />
+            </div>
+            <Link to={`/user/${post.authorId}`}>
+              {post.displayName}
             </Link>
             <span className='createdAt'>
-              {new Date(post.createdAt * 1000).toLocaleString()}
+              {new Date(post.createdAt * 1000).toLocaleDateString()}
+            </span>
+            <span>
+              &#x1F5E8; {post.comments.length}
             </span>
           </div>
           <div className='contents'>

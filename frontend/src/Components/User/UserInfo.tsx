@@ -10,20 +10,19 @@ const UserInfoBlock = styled.div`
   .user-info {
     display: grid;
     grid-template-columns: 1fr 2fr;
-    grid-auto-rows: 150px;
+    grid-template-rows: 1fr 1fr;
     background: blue;
 
     .profile-image {
-      display: flex;
-      justify-content: center;
-      align-items: center;
       background: red;
       grid-row-start: 1;
       grid-row-end: 3;
     }
 
     .profile-image img {
-      border-radius: 50%;
+      /* border-radius: 50%; */
+      width: 200px;
+      height: 200px;
     }
 
     .profile-top {
@@ -32,14 +31,14 @@ const UserInfoBlock = styled.div`
     }
 
     .profile-name {
-      display: flex;
-      align-items: center;
+      grid-row: 1;
       background: lime;
       padding-left: 2rem;
       font-size: 2rem;
     }
 
     .profile-introduce {
+      grid-row: 2;
       padding-top: 1rem;
       padding-left: 1rem;
       font-size: 1.125rem;
@@ -47,9 +46,7 @@ const UserInfoBlock = styled.div`
     }
 
     .following {
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      grid-row: 1;
       font-size: 24px;
     }
 
@@ -178,8 +175,6 @@ const UserInfo = ({
               <div className='profile-image'>
                 <img
                   alt='profile_image'
-                  width='200px'
-                  height='200px'
                   src={`http://192.249.18.176/images/${user.profileImage}`}
                 />
               </div>
