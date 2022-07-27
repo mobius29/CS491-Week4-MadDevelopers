@@ -143,6 +143,7 @@ const CommentBlock = styled.div`
 `
 
 interface IProps {
+  userId: number
   postId: number
   post: post | null
   error: string
@@ -194,6 +195,7 @@ const Comment = ({
 }
 
 const PostInfo = ({
+  userId,
   postId,
   post,
   error,
@@ -247,17 +249,23 @@ const PostInfo = ({
         <div>{error}</div>
       ) : (
         <PostInfoBlock>
-          <div className='title-btns'>
-            <span className='title'>{post.title}</span>
-            <div className='btns'>
-              <Link to={`/post/update/${postId}`} className='btn update-btn'>
-                수정
-              </Link>
-              <div className='btn delete-btn' onClick={() => onDelete(postId)}>
-                삭제
+          {userId === post.authorId && (
+            <div className='title-btns'>
+              <span className='title'>{post.title}</span>
+              <div className='btns'>
+                <Link to={`/post/update/${postId}`} className='btn update-btn'>
+                  수정
+                </Link>
+                <div
+                  className='btn delete-btn'
+                  onClick={() => onDelete(postId)}
+                >
+                  삭제
+                </div>
               </div>
             </div>
-          </div>
+          )}
+
           <div className='info'>
             <Link to={`/user/${post.authorId}`} className='author'>
               author: {post.displayName}
