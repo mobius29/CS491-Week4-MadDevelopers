@@ -264,7 +264,7 @@ const PostInfo = ({
 
           <div className='info'>
             <div className="profile-image">
-              <img src={`http://192.249.18.176/images/${post.profileImage}`} />
+              <img alt="Profile Image" src={`http://192.249.18.176/images/${post.profileImage}`} />
             </div>
             <Link to={`/user/${post.authorId}`}>
               {post.displayName}
