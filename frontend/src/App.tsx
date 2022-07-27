@@ -2,7 +2,6 @@ import { Route, Routes } from 'react-router-dom'
 import './App.css'
 import HomePage from './Pages/HomePage'
 import LoginPage from './Pages/LoginPage'
-import TypingPage from './Pages/TypingPage'
 import PostInfoPage from './Pages/PostInfoPage'
 import PostListPage from './Pages/PostListPage'
 import PostUpdatePage from './Pages/PostUpdatePage'
@@ -10,6 +9,9 @@ import RegisterPage from './Pages/RegisterPage'
 import UserInfoPage from './Pages/UserInfoPage'
 import UserUpdatePage from './Pages/UserUpdatePage'
 import WritePostPage from './Pages/WritePostPage'
+import TypingStartPage from './Pages/TypingStartPage'
+import TypingResultPage from './Pages/TypingResultPage'
+import TypingDoingPage from './Pages/TypingDoingPage'
 
 const App = () => {
   return (
@@ -28,7 +30,9 @@ const App = () => {
         <Route path='/post/update/:id' element={<PostUpdatePage />} />
         <Route path='/user/:id' element={<UserInfoPage />} />
         <Route path='/user/update/:id' element={<UserUpdatePage />} />
-        <Route path='/minigame' element={<TypingPage />} />
+        <Route path='/typing' element={<TypingStartPage />} />
+        <Route path='/typing/doing/:extension' element={<TypingDoingPage />} />
+        <Route path='/typing/result' element={<TypingResultPage />} />
       </Routes>
     </div>
   )

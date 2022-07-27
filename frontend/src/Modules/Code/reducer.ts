@@ -9,6 +9,11 @@ const initialState: State = {
 }
 
 const reducer = createReducer<State, Action>(initialState, {
+  [actions.INITIALIZE]: (state) => ({
+    lines: [],
+    getCodeSuccess: false,
+    getCodeError: null,
+  }),
   [actions.GET_CODE_SUCCESS]: (state, { payload: { lines } }) => ({
     lines,
     getCodeSuccess: true,
