@@ -5,54 +5,50 @@ import { post, comment } from '../../lib/types'
 const PostInfoBlock = styled.div`
   width: 100%;
 
-  .title-btns {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-bottom: 1px solid black;
+  .title {
+    margin-top: 1rem;
+    text-align: center;
+    font-size: 3rem;
+    font-weight: bold;
+  }
 
-    .title {
-      display: flex;
-      align-items: center;
-      height: 5rem;
-      margin-left: 3rem;
-      font-size: 30px;
-      font-weight: bold;
+  .btns {
+    display: flex;
+    width: 100%;
+    font-size: 16px;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    justify-content: flex-end;
+    height: auto;
+
+    .btn {
+      text-align: center;
+      width: 80px;
+      height: 50px;
+      margin-right: 0.5rem;
+      line-height: 50px;
+      border-radius: 10px;
+      border: none;
     }
 
-    .btns {
-      display: flex;
-      margin-right: 3rem;
-      font-size: 16px;
+    .delete-btn {
+      background: pink;
+    }
 
-      .btn {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 80px;
-        height: 50px;
-        margin-right: 2rem;
-        border-radius: 10px;
-        border: none;
-      }
+    .delete-btn:hover {
+      background: red;
+      color: white;
+      cursor: pointer;
+    }
 
-      .delete-btn {
-        background: pink;
-      }
-      .delete-btn:hover {
-        background: red;
-        color: white;
-        cursor: pointer;
-      }
+    .update-btn {
+      background: skyblue;
+      color: black;
+    }
 
-      .update-btn {
-        background: skyblue;
-        color: black;
-      }
-      .update-btn:hover {
-        background: blue;
-        color: white;
-      }
+    .update-btn:hover {
+      background: blue;
+      color: white;
     }
   }
 
@@ -82,7 +78,6 @@ const PostInfoBlock = styled.div`
   .content {
     height: 550px;
     padding-left: 3rem;
-    border-bottom: 1px solid black;
   }
 
   .tags {
@@ -90,43 +85,6 @@ const PostInfoBlock = styled.div`
     height: 50px;
     font-size: 18px;
     padding-top: 0.75rem;
-  }
-
-  .border {
-    border-bottom: 1px solid black;
-  }
-
-  .comment-block {
-    height: 70px;
-    margin-top: 0.5rem;
-  }
-
-  .comments-text {
-    display: flex;
-    align-items: center;
-    height: 40px;
-    padding-left: 2rem;
-  }
-
-  .comment-top {
-    margin-top: 0.125rem;
-    height: 30px;
-    display: flex;
-    justify-content: space-between;
-    margin-left: 2rem;
-
-    .changeParentComment {
-      margin-right: 2rem;
-    }
-  }
-
-  .comment-comment {
-    margin-top: 0.5rem;
-    margin-left: 2rem;
-  }
-
-  .reply {
-    padding-left: 2rem;
   }
 
   .comment-input {
@@ -146,6 +104,7 @@ const PostInfoBlock = styled.div`
   .cancelParentComment {
     margin-left: 2rem;
   }
+
 `
 
 const TagBlock = styled.span`
@@ -154,8 +113,41 @@ const TagBlock = styled.span`
 `
 
 const CommentBlock = styled.div`
-  width: 100%;
-  height: 50px;
+  width: 80%;
+  height: auto;
+  margin-top: 0.5rem;
+
+  .reply {
+    margin-left: 2rem;
+  }
+
+  .comment-block {
+    padding: 0.5rem;
+    border: 1px solid black;
+    border-radius: 10px;
+  }
+
+  .comments-text {
+    display: flex;
+    align-items: center;
+    height: auto;
+  }
+
+  .comment-top {
+    height: auto;
+    display: flex;
+    justify-content: space-between;
+
+    .changeParentComment {
+      margin-right: 2rem;
+    }
+  }
+
+  .comment-comment {
+    margin-top: 0.5rem;
+    margin-left: 2rem;
+  }
+
 `
 
 interface IProps {
@@ -189,24 +181,25 @@ const Comment = ({
   onChangeParentCommentId: (parentId: number) => void
 }) => {
   return (
-    <div className='border'>
-      <CommentBlock className={`${className} comment-block`}>
-        <div className='border'>
-          <div className='comment-top'>
+    <CommentBlock>
+      <div className={`${className} comment-block`}>
+        <div className='comment-top'>
+          <Link to={`/user/${comment.userId}`}>
             <div className='comment-author'>{comment.displayName}</div>
-            {isParent && (
-              <div
-                className='changeParentComment'
-                onClick={() => onChangeParentCommentId(comment.commentId)}
-              >
-                reply
-              </div>
-            )}
-          </div>
+          </Link>
+          <span>{(new Date(comment.createdAt * 1000)).toLocaleString()}</span>
         </div>
         <div className='comment-comment'>{comment.comment}</div>
-      </CommentBlock>
-    </div>
+        {isParent && (
+          <div
+            className='changeParentComment'
+            onClick={() => onChangeParentCommentId(comment.commentId)}
+          >
+            reply
+          </div>
+        )}
+      </div>
+    </CommentBlock>
   )
 }
 
@@ -226,6 +219,7 @@ const PostInfo = ({
 }: IProps) => {
   const Tags = post?.tags.map((tag) => <Tag key={tag.tagId} tag={tag.tag} />)
   console.log(post?.tags)
+
   const Comments = post?.comments.map((comment) => {
     if (comment.parentCommentId === null) {
       const replies = post?.comments.map((reply_comment) => {
@@ -250,7 +244,7 @@ const PostInfo = ({
           <Comment
             key={comment.commentId}
             comment={comment}
-            className='parent'
+            className=''
             isParent={true}
             onChangeParentCommentId={onChangeParentCommentId}
           />
@@ -259,28 +253,14 @@ const PostInfo = ({
       )
     } else return null
   })
+
   return (
     <>
       {post === null ? (
         <div>{error}</div>
       ) : (
         <PostInfoBlock>
-          {userId === post.authorId && (
-            <div className='title-btns'>
-              <span className='title'>{post.title}</span>
-              <div className='btns'>
-                <Link to={`/post/update/${postId}`} className='btn update-btn'>
-                  수정
-                </Link>
-                <div
-                  className='btn delete-btn'
-                  onClick={() => onDelete(postId)}
-                >
-                  삭제
-                </div>
-              </div>
-            </div>
-          )}
+          <div className='title'>{post.title}</div>
 
           <div className='info'>
             <div className="profile-image">
@@ -292,16 +272,29 @@ const PostInfo = ({
             <span className='createdAt'>
               {new Date(post.createdAt * 1000).toLocaleDateString()}
             </span>
-            <span>
-              &#x1F5E8; {post.comments.length}
-            </span>
           </div>
+
           <div className='contents'>
             <div className='content'>{post.content}</div>
             <div className='tags'>Tag: {Tags}</div>
           </div>
+
+          {userId === post.authorId && (
+            <div className='btns'>
+              <Link to={`/post/update/${postId}`} className="btn update-btn">
+                수정
+              </Link>
+              <div
+                className='btn delete-btn'
+                onClick={() => onDelete(postId)}
+              >
+                삭제
+              </div>
+            </div>
+          )}
+
           <div className='comments'>
-            <div className='comments-text'>댓글</div>
+            <div className='comments-text'>{post.comments.length}개의 댓글이 있습니다.</div>
             <div className='comments-area'>
               {Comments}
               <form className='add-comment-form' onSubmit={onSubmit}>
