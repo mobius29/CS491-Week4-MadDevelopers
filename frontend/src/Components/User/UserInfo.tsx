@@ -1,73 +1,79 @@
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
+import emptyStar from "./empty-star.png"
+import filledStar from "./filled-star.png"
 
 const UserInfoBlock = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 1200px;
+  height: auto;
+  margin: 0 auto;
 
   .user-info {
+    width: 80%;
+    margin: 0 auto;
     display: grid;
     grid-template-columns: 1fr 2fr;
     grid-template-rows: 1fr 1fr;
-    background: blue;
 
     .profile-image {
-      background: red;
       grid-row-start: 1;
       grid-row-end: 3;
     }
 
     .profile-image img {
-      /* border-radius: 50%; */
+      border-radius: 50%;
       width: 200px;
       height: 200px;
     }
 
     .profile-top {
       display: grid;
+      align-items: center;
       grid-template-columns: 3fr 1fr;
     }
 
     .profile-name {
       grid-row: 1;
-      background: lime;
-      padding-left: 2rem;
       font-size: 2rem;
     }
 
     .profile-introduce {
       grid-row: 2;
-      padding-top: 1rem;
-      padding-left: 1rem;
-      font-size: 1.125rem;
-      background: yellow;
+      font-size: 18px;
     }
 
     .following {
+      display: flex;
+      align-items: center;
+      justify-content: space-evenly;
       grid-row: 1;
-      font-size: 24px;
+      font-size: 20px;
+      text-align: center;
     }
 
-    .isFollowing {
-      background: red;
+    .star-image img {
+      width: 30px;
+      height: 30px;
     }
 
-    .unFollowing {
-      background: aqua;
+    .star-image img:hover {
+      width: 30px;
+      height: 30px;
+      cursor: pointer;
     }
   }
 
   .post-list {
     margin-top: 2rem;
-    margin-left: 1.5rem;
-    height: 1000px;
+    height: auto;
   }
 
   .btn {
     font-size: 18px;
     float: right;
+    margin-top: 1rem;
     margin-right: 2rem;
   }
 `
@@ -180,7 +186,8 @@ const UserInfo = ({
               </div>
               <div className='profile-top'>
                 <div className='profile-name'>{user.displayName}</div>
-                {userId === id ? (
+
+                {/* {userId === id ? (
                   <div className='following'>{user.starCount}</div>
                 ) : (
                   <div
@@ -193,7 +200,17 @@ const UserInfo = ({
                   >
                     {followerCount}
                   </div>
-                )}
+                )} */}
+
+                <div className="following">
+                  <div className="star-image" onClick={userId === id ? (() => { }) : (() => onClickStar(userId))}>
+                    <img src={isFollowing ? filledStar : emptyStar} />
+                  </div>
+                  <div>
+                    {followerCount}
+                  </div>
+                </div>
+
               </div>
 
               <div className='profile-introduce'>{user.selfInformation}</div>

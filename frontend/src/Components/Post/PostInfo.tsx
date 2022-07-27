@@ -104,6 +104,24 @@ const PostInfoBlock = styled.div`
     margin-left: 2rem;
   }
 
+  .comments-area {
+    margin-left: 2rem;
+  }
+
+  .comments-text {
+    display: flex;
+    align-items: center;
+    margin-left: 2rem;
+    height: auto;
+  }
+
+  .changeParentComment {
+    text-align: right;
+  }
+
+  .changeParentComment:hover {
+    cursor: pointer;
+  }
 `
 
 const TagBlock = styled.span`
@@ -125,26 +143,14 @@ const CommentBlock = styled.div`
     border-radius: 10px;
   }
 
-  .comments-text {
-    display: flex;
-    align-items: center;
-    height: auto;
-  }
-
   .comment-top {
     height: auto;
     display: flex;
     justify-content: space-between;
-
-    .changeParentComment {
-      margin-right: 2rem;
-    }
   }
 
   .comment-comment {
-    margin-top: 0.5rem;
-    margin-left: 2rem;
-    margin-right: 2rem;
+    margin: 1rem;
   }
 `
 
@@ -187,7 +193,9 @@ const Comment = ({
           </Link>
           <span>{(new Date(comment.createdAt * 1000)).toLocaleString()}</span>
         </div>
+
         <div className='comment-comment'>{comment.comment}</div>
+
         {isParent && (
           <div
             className='changeParentComment'
