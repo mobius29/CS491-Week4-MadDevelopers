@@ -37,6 +37,8 @@ const TypingContainer = () => {
     current: 0,
   })
   const currentLineRef = useRef<HTMLInputElement>(null)
+  const [dropdownDisplay, setDropdownDisplay] = useState<boolean>(false)
+  const [selectedExtension, setSelectedExtension] = useState<string>('')
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
@@ -62,10 +64,19 @@ const TypingContainer = () => {
     }
   }
 
+  const onClickDropdownDisplay = () => {
+    setDropdownDisplay(!dropdownDisplay)
+  }
+
+  const onClickDropdown = (extension: string) => {
+    setSelectedExtension(extension)
+    setDropdownDisplay(false)
+  }
+
   const onClickStartButton = () => {
-    if (['curl', 'spring', 'flask', 'dotnetgc'].includes(extension)) {
+    if (['curl', 'spring', 'flask', 'dotnetgc'].includes(selectedExtension)) {
       setExtensionError('')
-      dispatch(getCode(extension))
+      dispatch(getCode(selectedExtension))
     } else {
       setExtensionError(
         'extension can be only one of [curl, spring, flask, dotnetgc]'
@@ -76,11 +87,13 @@ const TypingContainer = () => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter') {
       setLineInput('')
-      setCurrentLine(currentLine + 1)
       setCounter({
         ...counter,
+        error:
+          counter.error + Math.abs(counter.current - lines[currentLine].length),
         current: 0,
       })
+      setCurrentLine(currentLine + 1)
       if (currentLineRef && currentLineRef.current)
         currentLineRef.current.focus()
     } else if (e.key === 'Backspace') {
@@ -141,10 +154,13 @@ const TypingContainer = () => {
           timer={timer}
           currentLine={currentLine}
           currentLineRef={currentLineRef}
-          extension={extension}
           extensionError={extensionError}
           lines={lines}
           lineInput={lineInput}
+          dropdownDisplay={dropdownDisplay}
+          selectedExtension={selectedExtension}
+          onClickDropdownDisplay={onClickDropdownDisplay}
+          onClickDropdown={onClickDropdown}
           onChange={onChange}
           onKeyDown={onKeyDown}
           onClickStartButton={onClickStartButton}

@@ -48,9 +48,43 @@ const TypingStartBlock = styled.div`
     }
   }
 
+  .start {
+    display: flex;
+    align-items: center;
+  }
+
+  .dropdown {
+    position: relative;
+    width: 100px;
+    height: 30px;
+    padding-top: 0.375rem;
+    border: 1px solid black;
+  }
+
+  .dropdown-default {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .dropdown-open {
+    position: absolute;
+    top: 30px;
+  }
+
+  .dropdown-element {
+    width: 100px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+  }
+
   .start-btn {
     width: 75px;
     height: 40px;
+    margin-left: 3rem;
     background: red;
   }
 `
@@ -110,10 +144,13 @@ interface IProps {
   isStart: boolean
   currentLine: number
   currentLineRef: React.RefObject<HTMLInputElement> | null
-  extension: string
   extensionError: string
   lines: string[]
   lineInput: string
+  dropdownDisplay: boolean
+  selectedExtension: string
+  onClickDropdownDisplay: () => void
+  onClickDropdown: (extension: string) => void
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void
   onKeyDown: (e: React.KeyboardEvent<HTMLInputElement>) => void
   onClickStartButton: () => void
@@ -123,14 +160,18 @@ const TypingStart = ({
   timer,
   currentLine,
   currentLineRef,
-  extension,
   extensionError,
   lines,
   lineInput,
+  dropdownDisplay,
+  selectedExtension,
+  onClickDropdownDisplay,
+  onClickDropdown,
   onChange,
   onKeyDown,
   onClickStartButton,
 }: IProps) => {
+  const extensions = ['curl', 'spring', 'flask', 'dotnetgc']
   let typingLine: ReactElement[] = []
   for (let i = currentLine; i < currentLine + 3; ++i) {
     if (i === currentLine) {
@@ -166,14 +207,24 @@ const TypingStart = ({
           <div className='typing-area'>{typingLine}</div>
         </>
       ) : (
-        <>
-          <input
-            type='text'
-            name='extension'
-            placeholder='extension'
-            value={extension}
-            onChange={onChange}
-          />
+        <div className='start'>
+          <div className='dropdown' onClick={onClickDropdownDisplay}>
+            <div className='dropdown-default'>
+              {selectedExtension === '' ? '선택하세요' : selectedExtension}
+            </div>
+            {dropdownDisplay && (
+              <div className='dropdown-open'>
+                {extensions.map((extension) => (
+                  <div
+                    className='dropdown-element'
+                    onClick={() => onClickDropdown(extension)}
+                  >
+                    {extension}
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
           <button
             type='button'
             className='start-btn'
@@ -181,7 +232,8 @@ const TypingStart = ({
           >
             Start
           </button>
-        </>
+          {extensionError && <div>{extensionError}</div>}
+        </div>
       )}
     </TypingStartBlock>
   )

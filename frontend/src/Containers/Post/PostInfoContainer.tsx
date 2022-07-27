@@ -97,6 +97,7 @@ const PostInfoContainer = () => {
     <>
       <Header id={id} />
       <PostInfo
+        userId={id}
         postId={postId}
         post={post}
         error={error}
