@@ -43,16 +43,33 @@ const TypingContainer = () => {
     if (name === 'extension') {
       setExtension(value)
     } else if (name === 'lineInput') {
+      let nextError = counter.error
+      if (lineInput.length < value.length) {
+        nextError =
+          lines[currentLine].charAt(counter.current) !==
+          value.charAt(counter.current)
+            ? counter.error + 1
+            : counter.error
+
+        setCounter({
+          total: counter.total + 1,
+          error: nextError,
+          current: counter.current + 1,
+        })
+      }
+
       setLineInput(value)
     }
   }
 
   const onClickStartButton = () => {
-    if (['c', 'cpp', 'java', 'python'].includes(extension)) {
+    if (['curl', 'spring', 'flask', 'dotnetgc'].includes(extension)) {
       setExtensionError('')
       dispatch(getCode(extension))
     } else {
-      setExtensionError('extension can be only one of [c, cpp, java, python]')
+      setExtensionError(
+        'extension can be only one of [curl, spring, flask, dotnetgc]'
+      )
     }
   }
 
@@ -60,8 +77,24 @@ const TypingContainer = () => {
     if (e.key === 'Enter') {
       setLineInput('')
       setCurrentLine(currentLine + 1)
+      setCounter({
+        ...counter,
+        current: 0,
+      })
       if (currentLineRef && currentLineRef.current)
         currentLineRef.current.focus()
+    } else if (e.key === 'Backspace') {
+      if (lineInput !== '') {
+        setCounter({
+          total: counter.total - 1,
+          error:
+            lineInput.charAt(counter.current - 1) !==
+            lines[currentLine].charAt(counter.current - 1)
+              ? counter.error - 1
+              : counter.error,
+          current: counter.current - 1,
+        })
+      }
     }
   }
 
@@ -117,7 +150,7 @@ const TypingContainer = () => {
           onClickStartButton={onClickStartButton}
         />
       ) : (
-        <TypingResult />
+        <TypingResult total={counter.total} error={counter.error} />
       )}
     </>
   )
