@@ -11,7 +11,6 @@ import { getCode } from '../../Modules/Code'
 const TypingContainer = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const [extension, setExtension] = useState<string>('')
   const [extensionError, setExtensionError] = useState<string>('')
   const [lineInput, setLineInput] = useState<string>('')
   const { id, checkIdError, lines, getCodeSuccess, getCodeError } = useSelector(
@@ -42,9 +41,7 @@ const TypingContainer = () => {
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target
-    if (name === 'extension') {
-      setExtension(value)
-    } else if (name === 'lineInput') {
+    if (name === 'lineInput') {
       let nextError = counter.error
       if (lineInput.length < value.length) {
         nextError =

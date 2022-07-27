@@ -1,4 +1,3 @@
-import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { ThemeProvider } from 'styled-components'
 import theme from './styles/theme'
@@ -8,6 +7,7 @@ import reportWebVitals from './reportWebVitals'
 import { BrowserRouter } from 'react-router-dom'
 import configureStore from './Modules/configureStore'
 import { Provider } from 'react-redux'
+import './index.css'
 
 const store = configureStore()
 

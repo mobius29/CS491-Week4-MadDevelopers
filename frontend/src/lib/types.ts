@@ -17,6 +17,7 @@ export type post = {
   title: string
   content: string
   authorId: number
+  profileImage: string
   displayName: string
   commentCount: number
   tags: tag[]
