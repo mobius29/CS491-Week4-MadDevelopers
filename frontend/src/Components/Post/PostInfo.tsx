@@ -12,6 +12,40 @@ const PostInfoBlock = styled.div`
     font-weight: bold;
   }
 
+  .info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    font-size: 18px;
+    margin-top: 1rem;
+
+    .profile-image img {
+      border-radius: 50%;
+      margin: 0.5rem 0;
+      width: 60px;
+      height: 60px;
+    }
+  }
+
+  .content {
+    margin-top: 1rem;
+    font-size: 20px;
+    border-bottom: 1px solid black;
+    min-height: 300px;
+    height: auto;
+    padding: 3rem;
+  }
+
+  .tags-and-buttons {
+    display: flex;
+    height: 80px;
+    font-size: 18px;
+    align-items: center;
+    margin-left: 3rem;
+    margin-bottom: 1rem;
+  }
+
   .btns {
     display: flex;
     width: 100%;
@@ -52,41 +86,6 @@ const PostInfoBlock = styled.div`
     }
   }
 
-  .info {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    font-size: 18px;
-    margin-top: 1rem;
-
-    .profile-image img {
-      border-radius: 50%;
-      margin: 0.5rem 0;
-      width: 60px;
-      height: 60px;
-    }
-  }
-
-  .contents {
-    height: 600px;
-    margin-top: 1rem;
-    font-size: 24px;
-    border-bottom: 1px solid black;
-  }
-
-  .content {
-    height: 550px;
-    padding-left: 3rem;
-  }
-
-  .tags {
-    margin-left: 3rem;
-    height: 50px;
-    font-size: 18px;
-    padding-top: 0.75rem;
-  }
-
   .comment-input {
     width: 80%;
     height: 30px;
@@ -108,8 +107,7 @@ const PostInfoBlock = styled.div`
 `
 
 const TagBlock = styled.span`
-  width: 200px;
-  height: 40px;
+  margin-left: 1rem;
 `
 
 const CommentBlock = styled.div`
@@ -146,8 +144,8 @@ const CommentBlock = styled.div`
   .comment-comment {
     margin-top: 0.5rem;
     margin-left: 2rem;
+    margin-right: 2rem;
   }
-
 `
 
 interface IProps {
@@ -264,7 +262,7 @@ const PostInfo = ({
 
           <div className='info'>
             <div className="profile-image">
-              <img alt="Profile Image" src={`http://192.249.18.176/images/${post.profileImage}`} />
+              <img alt="Profile" src={`http://192.249.18.176/images/${post.profileImage}`} />
             </div>
             <Link to={`/user/${post.authorId}`}>
               {post.displayName}
@@ -274,24 +272,28 @@ const PostInfo = ({
             </span>
           </div>
 
-          <div className='contents'>
-            <div className='content'>{post.content}</div>
-            <div className='tags'>Tag: {Tags}</div>
-          </div>
+          <div className='content'>{post.content}</div>
 
-          {userId === post.authorId && (
-            <div className='btns'>
-              <Link to={`/post/update/${postId}`} className="btn update-btn">
-                수정
-              </Link>
-              <div
-                className='btn delete-btn'
-                onClick={() => onDelete(postId)}
-              >
-                삭제
-              </div>
+          <div className="tags-and-buttons">
+            Tags:
+            <div>
+              {Tags}
             </div>
-          )}
+
+            {userId === post.authorId && (
+              <div className='btns'>
+                <Link to={`/post/update/${postId}`} className="btn update-btn">
+                  수정
+                </Link>
+                <div
+                  className='btn delete-btn'
+                  onClick={() => onDelete(postId)}
+                >
+                  삭제
+                </div>
+              </div>
+            )}
+          </div>
 
           <div className='comments'>
             <div className='comments-text'>{post.comments.length}개의 댓글이 있습니다.</div>
