@@ -2,19 +2,19 @@ import { Router } from "express";
 import fs from "fs";
 
 const curlSource = fs.readFileSync("typegame/curl.c", "utf8");
-const flaskSource = fs.readFileSync("typegame/flask.py", "utf8");
+const gitSource = fs.readFileSync("typegame/git.c", "utf8");
 const springSource = fs.readFileSync("typegame/spring.java", "utf8");
 const dotnetGCSource = fs.readFileSync("typegame/dotnetgc.cpp", "utf8");
 
 const curlLines: string[] = curlSource.split("\n");
-const flaskLines: string[] = flaskSource.split("\n");
+const gitLines: string[] = gitSource.split("\n");
 const springLines: string[] = springSource.split("\n");
 const dotnetGCLines: string[] = dotnetGCSource.split("\n");
 
 const linesMap = new Map<string, string[]>([
   ["curl", curlLines],
   ["spring", springLines],
-  ["flask", flaskLines],
+  ["git", gitLines],
   ["dotnetgc", dotnetGCLines],
 ]);
 
