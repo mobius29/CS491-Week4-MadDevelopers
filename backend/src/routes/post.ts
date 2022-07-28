@@ -52,6 +52,7 @@ postsRouter.get('/post/:id', (req, res) => {
       content,
       authorId,
       displayName,
+      profileImage,
       unix_timestamp(p.createdAt) as createdAt,
       unix_timestamp(lastUpdated) as lastUpdated
     FROM Posts p JOIN Users u ON p.authorId = u.id

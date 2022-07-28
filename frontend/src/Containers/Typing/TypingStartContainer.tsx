@@ -31,7 +31,7 @@ const TypingStartContainer = () => {
   }
 
   const onClickStartButton = () => {
-    if (['curl', 'spring', 'flask', 'dotnetgc'].includes(selectedExtension)) {
+    if (['curl', 'spring', 'git', 'dotnetgc'].includes(selectedExtension)) {
       setExtensionError('')
       navigate(`/typing/doing/${selectedExtension}`)
     } else {

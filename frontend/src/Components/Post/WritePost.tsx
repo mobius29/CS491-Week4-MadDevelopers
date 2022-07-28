@@ -1,9 +1,16 @@
 import styled from 'styled-components'
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 
 const WritePostBlock = styled.div`
   width: 90%;
   margin: 0 auto;
+
+  .home {
+    margin-top: 3rem;
+    font-size: 2.5rem;
+    font-weight: bold;
+  }
 
   .title {
     width: 100%;
@@ -45,8 +52,23 @@ const WritePostBlock = styled.div`
 
   .bottom-btns {
     display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
+  .btn {
     margin-top: 1rem;
+    font-size: 1.5rem;
+  }
+
+  .add-tag-btn {
+    margin-left: 2rem;
+    cursor: pointer;
+  }
+
+  .submit-btn {
+    margin-right: 2rem;
+    cursor: pointer;
   }
 `
 
@@ -128,6 +150,9 @@ const WritePost = ({
 
   return (
     <WritePostBlock>
+      <Link to='/' className='home'>
+        Mad-Developers
+      </Link>
       <form onSubmit={onSubmit}>
         <div className='title-area'>
           <div className='title'>Title</div>
@@ -155,7 +180,7 @@ const WritePost = ({
         <div className='tag-area'>{tagList}</div>
         <div className='bottom-btns'>
           <span
-            className='add-tag-btn'
+            className='add-tag-btn btn'
             onClick={() => {
               addTags(numId)
               setNumId(numId + 1)
@@ -163,7 +188,7 @@ const WritePost = ({
           >
             add
           </span>
-          <button className='submit-btn' type='submit'>
+          <button className='submit-btn btn' type='submit'>
             submit
           </button>
         </div>

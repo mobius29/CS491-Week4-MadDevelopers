@@ -121,15 +121,25 @@ userRouter.get('/:id', (req, res) => {
     (SELECT COUNT(*) FROM Stars WHERE followingId=${id}) as starCount
     FROM Users
     WHERE id = ${id} AND isDeleted = 0;`,
-    (error, user) => {
-      if (error) {
-        console.error(error)
-        return res.send(500).send(error.message)
-      }
+    (_, user) => {
       if (user.length === 1) {
-        return res.status(200).send({ user: user[0] })
-      } else {
-        return res.sendStatus(404)
+          connection.query(
+            `SELECT
+            p.id as postId,
+            p.title,
+            unix_timestamp(p.createdAt) as createdAt,
+            (SELECT COUNT(*) FROM Comments c WHERE c.postId = p.id) as commentCount
+            FROM Users u JOIN Posts p ON u.id = p.authorId
+            WHERE p.authorId = ${id}
+            ORDER BY p.createdAt DESC
+            `,
+            (_, posts) => {
+              return res.status(200).send({ user: user[0], posts });
+            }
+          );
+      }
+      else {
+        return res.sendStatus(404);
       }
     }
   )

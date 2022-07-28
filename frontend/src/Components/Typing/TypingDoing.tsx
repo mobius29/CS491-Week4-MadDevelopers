@@ -27,6 +27,7 @@ const TypingStartBlock = styled.div`
         margin-right: 2rem;
         letter-spacing: 0.125rem;
         font-size: 24px;
+        overflow-wrap: break-word;
 
         .wrong {
           color: red;
@@ -92,6 +93,7 @@ const TypingLine = forwardRef(
             placeholder='repeat above line'
             value={lineInput}
             onChange={onChange}
+            spellCheck={false}
           />
         )}
       </div>

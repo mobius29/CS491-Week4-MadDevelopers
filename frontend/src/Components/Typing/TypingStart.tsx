@@ -8,6 +8,9 @@ const TypingStartBlock = styled.div`
   align-items: center;
   justify-content: center;
 
+  .ment {
+    margin-bottom: 2rem;
+  }
   .start {
     display: flex;
     align-items: center;
@@ -66,10 +69,11 @@ const TypingStart = ({
   onClickDropdown,
   onClickStartButton,
 }: IProps) => {
-  const extensions = ['curl', 'spring', 'flask', 'dotnetgc']
+  const extensions = ['curl', 'spring', 'git', 'dotnetgc']
 
   return (
     <TypingStartBlock>
+      <div className='ment'>여러분의 타자 실력을 측정해보세요.</div>
       <div className='start'>
         <div className='dropdown' onClick={onClickDropdownDisplay}>
           <div className='dropdown-default'>
